@@ -1,0 +1,21 @@
+#logo{
+    width: 70px;
+}
+.vertical-line {
+    border-right: 2px solid #E6EFF5 ;
+    font-size: 18px;
+}
+
+.normal{
+    color: #B1B1B1;
+}
+.active-page{
+    color:#043866;
+    border-left: 8px solid #043866;
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.active-page:first-child + .active-page:last-child{
+    margin-top: 5px;
+}

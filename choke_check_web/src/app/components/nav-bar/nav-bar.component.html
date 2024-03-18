@@ -1,0 +1,38 @@
+<div class="d-flex flex-column flex-shrink-0 p-3 min-vh-100 position-fixed vertical-line" style="width: 240px;">
+    <a [routerLink]="['home/']" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+        <img src="../../../assets/CCLogo-removebg-preview.png" alt="" id="logo">
+        <span class="title fw-bold fs-4 m-1" > ChokeCheck</span>
+    </a>
+    <ul class="nav nav-pills flex-column mb-auto mt-5">
+        <li class="nav-item">
+            <a [routerLink]="['home/']" [routerLinkActive]="['active-page']" class="nav-link d-flex normal align-middle">
+                <i class="fa-solid fa-house"></i>
+                <span class="m-4 mt-0 lh-1 mb-3 "> Home</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a [routerLink]="['gym/']" [routerLinkActive]="['active-page']" class="nav-link d-flex normal align-middle">
+                <i class="fa-solid fa-city"></i>
+                <span class="m-4 mt-0 lh-1 mb-3 "> Gym</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a [routerLink]="['users/']" [routerLinkActive]="['active-page']" class="nav-link d-flex normal align-middle">
+                <i class="fa-solid fa-user mx-1 " ></i>
+                <span class="m-4 mt-0 lh-1 mb-3 "> Users</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a [routerLink]="['tournament/']" [routerLinkActive]="['active-page']" class="nav-link d-flex normal align-middle">
+                <i class="fa-solid fa-trophy"></i>
+                <span class="m-4 mt-0 lh-1 mb-3 "> Tournaments</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a [routerLink]="['settings/']" [routerLinkActive]="['active-page']" class="nav-link d-flex normal align-middle">
+                <i class="fa-solid fa-gear"></i>
+                <span class="m-4 mt-0 lh-1 mb-3 "> Settings</span>
+            </a>
+        </li>
+    </ul>
+</div>
