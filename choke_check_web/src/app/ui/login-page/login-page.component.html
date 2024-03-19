@@ -1,0 +1,27 @@
+<div class="row min-vh-100 ">
+    <div class="col-6 white-bg d-flex justify-content-center align-items-center">
+        <form class="w-50">
+            <div class="form-group">
+                <input type="text" class="form-control item" id="username" placeholder="Username" [(ngModel)]="username"
+                    name="username">
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control item" id="password" placeholder="Password" [(ngModel)]="password"
+                    name="password">
+                <div id="errorMessage" class="text-danger d-flex justify-content-center align-items-center">{{errorMessage}}
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary create-account form-control item" (click)="login()">Login</button>
+            </div>
+        </form>
+    </div>
+    <div class="col-6 d-flex flex-column blue-bg justify-content-center align-items-center" >
+        <div>
+            <img src="../../../assets/CCLogo-removebg-preview.png" alt="">
+        </div>
+        <div class="text-white shrink-text wrap-text display-2 fw-bold p-5">
+            Welcome back! We've missed your presence here
+        </div>
+    </div>
+</div>
