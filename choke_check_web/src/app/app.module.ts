@@ -10,6 +10,11 @@ import { UsersPageComponent } from './ui/users-page/users-page.component';
 import { TournamentsPageComponent } from './ui/tournaments-page/tournaments-page.component';
 import { SettingsPageComponent } from './ui/settings-page/settings-page.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { LoginPageComponent } from './ui/login-page/login-page.component';
+import { FormsModule } from '@angular/forms';
+import { LoggedSectionComponent } from './sections/logged-section/logged-section.component';
+import { NotFoundPageComponent } from './ui/not-found-page/not-found-page.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -19,11 +24,16 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     GymPageComponent,
     UsersPageComponent,
     TournamentsPageComponent,
-    SettingsPageComponent
+    SettingsPageComponent,
+    LoginPageComponent,
+    LoggedSectionComponent,
+    NotFoundPageComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    FormsModule,
+    HttpClientModule,
     NgbModule
   ],
   providers: [
