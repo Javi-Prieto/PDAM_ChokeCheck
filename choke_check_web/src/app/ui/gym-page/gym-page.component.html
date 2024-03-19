@@ -1,1 +1,39 @@
-<p>gym-page works!</p>
+
+<table class="table table-striped table-hover table-responsive align-middle">
+	<thead>
+		<tr>
+			<th scope="col">Gym Id</th>
+			<th scope="col">Gym Name</th>
+			<th scope="col">Avg Belt</th>
+			<th scope="col">Latitude</th>
+            <th scope="col">Altitude</th>
+            <th scope="col">Number of Tournaments</th>
+            <th scope="col">Action</th>
+		</tr>
+	</thead>
+	<tbody>
+		@for (gym of gyms; track gym.id) {
+			<tr>
+				<th scope="row">{{ gym.id }}</th>
+				<td>
+					{{ gym.name }}
+				</td>
+				<td>{{ gym.avgBelt }}</td>
+				<td>{{ gym.latitude | number }}</td>
+                <td>{{ gym.altitude | number }}</td>
+                <td class="text-align-center">{{ gym.numberTournaments | number }}</td>
+                <td>Hola</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+<div class="d-flex justify-content-center p-2 m-auto align-middle">
+	<ngb-pagination
+		[collectionSize]="gymsInfo.totalElements"
+		[(page)]="gymsInfo.pageNumber"
+		[pageSize]="gymsInfo.size"
+		(pageChange)="refreshGyms()"
+	>
+	</ngb-pagination>
+</div>
