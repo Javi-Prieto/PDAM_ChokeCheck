@@ -14,7 +14,9 @@ import { LoginPageComponent } from './ui/login-page/login-page.component';
 import { FormsModule } from '@angular/forms';
 import { LoggedSectionComponent } from './sections/logged-section/logged-section.component';
 import { NotFoundPageComponent } from './ui/not-found-page/not-found-page.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient, withFetch } from '@angular/common/http';
+import { LoggerInterceptor } from './logger.interceptor';
+import { RemoveWrapperInterceptor } from './remove-wrapper-interceptor';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,12 @@ import { HttpClientModule } from '@angular/common/http';
     NgbModule
   ],
   providers: [
-    provideClientHydration()
+    provideClientHydration(),
+    { provide: HTTP_INTERCEPTORS, useClass: LoggerInterceptor, multi: true }, provideHttpClient(withFetch()), {
+      provide: HTTP_INTERCEPTORS,
+      useClass: RemoveWrapperInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

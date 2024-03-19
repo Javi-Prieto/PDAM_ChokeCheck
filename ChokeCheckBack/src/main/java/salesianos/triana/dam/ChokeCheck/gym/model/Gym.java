@@ -41,6 +41,6 @@ public class Gym {
     private Location location;
     private BeltColor avgLevel;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private List<Tournament> tournaments;
 }
