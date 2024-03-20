@@ -1,1 +1,46 @@
-<p>tournaments-page works!</p>
+<table class="table table-striped table-hover table-responsive align-middle">
+	<thead>
+		<tr>
+			<th scope="col">Tournament Id</th>
+			<th scope="col">Tournament Title</th>
+			<th scope="col">Date</th>
+			<th scope="col">Cost</th>
+            <th scope="col">Prize</th>
+            <th scope="col">Participant</th>
+            <th scope="col">Belt</th>
+            <th scope="col">Weight</th>
+            <th scope="col">City</th>
+            <th scope="col">Action</th>
+		</tr>
+	</thead>
+	<tbody>
+		@for (tournament of tournaments; track tournament.id) {
+			<tr>
+				<th scope="row">{{ tournament.id }}</th>
+				<td>
+					{{ tournament.title }}
+				</td>
+				<td>{{ tournament.date }}</td>
+				<td>{{ tournament.cost | number }}</td>
+                <td>{{ tournament.prize | number }}</td>
+                <td class="text-align-center">
+                    <ngb-progressbar class="mb-3" type="info" [value]="(tournament.applied/tournament.participants)*100"><b>{{tournament.applied}} of {{tournament.participants}}</b></ngb-progressbar>
+                </td>
+                <td>{{ tournament.higherBelt }}</td>
+                <td>{{ tournament.minWeight }} - {{tournament.maxWeight}}</td>
+                <td>{{ tournament.city }}</td>
+                <td>Hola</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+<div class="d-flex justify-content-center p-2 m-auto align-middle">
+	<ngb-pagination
+		[collectionSize]="tournamentsInfo.totalElements"
+		[(page)]="tournamentsInfo.pageNumber"
+		[pageSize]="tournamentsInfo.size"
+		(pageChange)="refreshTournaments()"
+	>
+	</ngb-pagination>
+</div>
