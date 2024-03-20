@@ -25,7 +25,12 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class TournamentService {
     private final TournamentRepository repo;
-
+    public MyPage<TournamentDto> getAll(Pageable pageable){
+        Page<Tournament> all = repo.findAll(pageable);
+        List<Tournament> result = repo.getAllIds(all.getContent().stream().map(Tournament::getId).toList());
+        Page<TournamentDto> toReturn = all.map(TournamentDto::ofWithoutApplies);
+        return MyPage.of(toReturn, result.stream().map(TournamentDto::ofTable).toList());
+    }
 
     public MyPage<TournamentDto> getAll(User user, Pageable pageable){
         Page<Tournament> all = repo.getTournamentByWeightInAndSex(user.getWeight(), user.getSex(), pageable);

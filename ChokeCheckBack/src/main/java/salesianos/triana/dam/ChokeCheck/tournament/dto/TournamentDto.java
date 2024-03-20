@@ -13,31 +13,31 @@ import java.util.UUID;
 
 @Builder
 public record TournamentDto(
-        @JsonView({TournamentViews.TournamentList.class})
+        @JsonView({TournamentViews.TournamentList.class, TournamentViews.TournamentTable.class})
         UUID id,
-        @JsonView({TournamentViews.TournamentList.class, TournamentViews.TournamentDetail.class})
+        @JsonView({TournamentViews.TournamentList.class, TournamentViews.TournamentDetail.class, TournamentViews.TournamentTable.class})
         String title,
-        @JsonView({TournamentViews.TournamentList.class, TournamentViews.TournamentDetail.class})
+        @JsonView({TournamentViews.TournamentList.class, TournamentViews.TournamentDetail.class, TournamentViews.TournamentTable.class})
 
         @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss") LocalDateTime date,
-        @JsonView({TournamentViews.TournamentList.class, TournamentViews.TournamentDetail.class})
+        @JsonView({TournamentViews.TournamentList.class, TournamentViews.TournamentDetail.class, TournamentViews.TournamentTable.class})
         double cost,
-        @JsonView({TournamentViews.TournamentList.class, TournamentViews.TournamentDetail.class})
+        @JsonView({TournamentViews.TournamentList.class, TournamentViews.TournamentDetail.class, TournamentViews.TournamentTable.class})
         int participants,
-        @JsonView({TournamentViews.TournamentList.class, TournamentViews.TournamentDetail.class})
+        @JsonView({TournamentViews.TournamentList.class, TournamentViews.TournamentDetail.class, TournamentViews.TournamentTable.class})
         int applied,
-        @JsonView({TournamentViews.TournamentList.class, TournamentViews.TournamentDetail.class})
+        @JsonView({TournamentViews.TournamentList.class, TournamentViews.TournamentDetail.class, TournamentViews.TournamentTable.class})
         String higherBelt,
-        @JsonView({TournamentViews.TournamentList.class, TournamentViews.TournamentDetail.class})
+        @JsonView({TournamentViews.TournamentList.class, TournamentViews.TournamentDetail.class, TournamentViews.TournamentTable.class})
         double prize,
-        @JsonView({TournamentViews.TournamentList.class, TournamentViews.TournamentDetail.class})
+        @JsonView({TournamentViews.TournamentList.class, TournamentViews.TournamentDetail.class, TournamentViews.TournamentTable.class})
         String author,
-        @JsonView({TournamentViews.TournamentList.class, TournamentViews.TournamentDetail.class})
+        @JsonView({TournamentViews.TournamentList.class, TournamentViews.TournamentDetail.class, TournamentViews.TournamentTable.class})
         int minWeight,
         @JsonView({TournamentViews.TournamentList.class, TournamentViews.TournamentDetail.class})
 
         boolean isAppliedByLoggedUser,
-        @JsonView({TournamentViews.TournamentList.class, TournamentViews.TournamentDetail.class})
+        @JsonView({TournamentViews.TournamentList.class, TournamentViews.TournamentDetail.class, TournamentViews.TournamentTable.class})
         int maxWeight,
         @JsonView({TournamentViews.TournamentDetail.class})
 
@@ -46,8 +46,25 @@ public record TournamentDto(
         double lat,
         @JsonView({TournamentViews.TournamentDetail.class})
         double lon,
-        @JsonView({ TournamentViews.TournamentDetail.class})
+        @JsonView({ TournamentViews.TournamentDetail.class, TournamentViews.TournamentTable.class})
         String city) {
+
+    public static TournamentDto ofTable(Tournament tournament){
+        return TournamentDto.builder()
+                .id(tournament.getId())
+                .title(tournament.getTitle())
+                .date(tournament.getBeginDate())
+                .cost(tournament.getCost())
+                .participants(tournament.getParticipants())
+                .applied(tournament.getApplies().size())
+                .higherBelt(tournament.getHigherBelt().toString())
+                .prize(tournament.getPrize())
+                .author(tournament.getAuthor().getName())
+                .minWeight(tournament.getMinWeight())
+                .maxWeight(tournament.getMaxWeight())
+                .city(tournament.getAuthor().getLocation().getCity())
+                .build();
+    }
 
     public static TournamentDto of(Tournament tournament, User user){
         return TournamentDto.builder()

@@ -8,7 +8,7 @@ import salesianos.triana.dam.ChokeCheck.tournament.jsonView.TournamentViews;
 import java.util.List;
 
 @Builder
-@JsonView(TournamentViews.TournamentList.class)
+@JsonView({TournamentViews.TournamentList.class, TournamentViews.TournamentTable.class})
 public record MyPage<T>(
 
         List<T> content,
