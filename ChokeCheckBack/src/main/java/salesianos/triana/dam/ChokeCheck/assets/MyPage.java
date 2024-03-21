@@ -39,7 +39,7 @@ public record MyPage<T>(
                 .first(page.isFirst())
                 .last(page.isLast())
                 .pageNumber(page.getPageable().getPageNumber())
-                .size(content.size())
+                .size(page.getPageable().getPageSize())
                 .totalElements(page.getTotalElements())
                 .build();
     }

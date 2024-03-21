@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,11 +21,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import salesianos.triana.dam.ChokeCheck.assets.MyPage;
 import salesianos.triana.dam.ChokeCheck.security.jwt.access.JwtProvider;
 import salesianos.triana.dam.ChokeCheck.tournament.model.Tournament;
 import salesianos.triana.dam.ChokeCheck.user.dto.*;
 import salesianos.triana.dam.ChokeCheck.user.model.User;
 import salesianos.triana.dam.ChokeCheck.user.service.UserService;
+
+
 
 @RestController
 @RequiredArgsConstructor
@@ -81,6 +86,78 @@ public class UserController {
         }
 
 
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Obtains the page of all the user", content = {
+                    @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = User.class)),
+                            examples = {@ExampleObject(
+                                    value = """
+                                                {
+                                                    "content": [
+                                                        {
+                                                            "name": "javi",
+                                                            "surname": "prieto",
+                                                            "username": "javi.prieto",
+                                                            "belt": "red",
+                                                            "age": 19,
+                                                            "weight": 76,
+                                                            "height": 178,
+                                                            "sex": 0,
+                                                            "email": "javi@gmail.com"
+                                                        },
+                                                        {
+                                                            "name": "paco",
+                                                            "surname": "perez",
+                                                            "username": "paquito_er_chulo",
+                                                            "belt": "blue",
+                                                            "age": 19,
+                                                            "weight": 76,
+                                                            "height": 178,
+                                                            "sex": 0,
+                                                            "email": "apquito@gmail.com"
+                                                        }
+                                                    ],
+                                                    "size": 10,
+                                                    "totalElements": 2,
+                                                    "pageNumber": 0,
+                                                    "first": true,
+                                                    "last": true
+                                                }
+                                            """
+                            )}
+                    )}),
+            @ApiResponse(responseCode = "401",
+                    description = "Not logged user",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = User.class)),
+                            examples = {@ExampleObject(
+                                    """
+                                        {
+                                            "error": "You can not do this"
+                                        }
+                                    """
+                            )
+                            })),
+            @ApiResponse(responseCode = "403",
+                    description = "Access denied",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = User.class)),
+                            examples = {@ExampleObject(
+                                    """
+                                        {
+                                            "error": "You can not do this"
+                                        }
+                                    """
+                            )
+                            }))
+    })
+    @Operation(summary = "Find all the users", description = "Returns all the users paged")
+    @GetMapping("/user/")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public MyPage<UserListResponse> getProfileByUsername(@PageableDefault() Pageable pageable){
+        return userService.findAll(pageable);
     }
 
     @ApiResponses(value = {
