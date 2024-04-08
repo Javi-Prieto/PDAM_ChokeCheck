@@ -1,12 +1,15 @@
 package salesianos.triana.dam.ChokeCheck.user.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import salesianos.triana.dam.ChokeCheck.assets.MyPage;
 import salesianos.triana.dam.ChokeCheck.error.exception.NotFoundException;
 import salesianos.triana.dam.ChokeCheck.post.service.PostService;
 import salesianos.triana.dam.ChokeCheck.user.dto.EditUser;
 import salesianos.triana.dam.ChokeCheck.user.dto.UserDetailResponse;
+import salesianos.triana.dam.ChokeCheck.user.dto.UserListResponse;
 import salesianos.triana.dam.ChokeCheck.user.dto.UserRegister;
 import salesianos.triana.dam.ChokeCheck.user.model.BeltColor;
 import salesianos.triana.dam.ChokeCheck.user.model.User;
@@ -52,6 +55,9 @@ public class UserService {
         Optional<User> selected= repo.findFirstByUsername(username);
         if(selected.isEmpty()) throw new NotFoundException("User");
         return UserDetailResponse.of(selected.get(), postService.getAllPostByCreatorUsername(username, user));
+    }
+    public MyPage<UserListResponse> findAll(Pageable pageable){
+        return MyPage.of(repo.findAll(pageable).map(UserListResponse::of));
     }
 
     public UserDetailResponse editUser(User ancient, EditUser newUser){
