@@ -9,6 +9,7 @@ import salesianos.triana.dam.ChokeCheck.location.model.Location;
 import salesianos.triana.dam.ChokeCheck.tournament.model.Tournament;
 import salesianos.triana.dam.ChokeCheck.user.model.BeltColor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,10 +38,15 @@ public class Gym {
 
 
     private String name;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private Location location;
     private BeltColor avgLevel;
 
     @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-    private List<Tournament> tournaments;
+    @Builder.Default
+    private List<Tournament> tournaments = new ArrayList<Tournament>();
+
+    public void addLocation(Location location){
+        this.location = location;
+    }
 }

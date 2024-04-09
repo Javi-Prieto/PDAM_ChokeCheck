@@ -7,19 +7,17 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import salesianos.triana.dam.ChokeCheck.assets.MyPage;
+import salesianos.triana.dam.ChokeCheck.gym.dto.GymRequest;
 import salesianos.triana.dam.ChokeCheck.gym.dto.GymResponse;
 import salesianos.triana.dam.ChokeCheck.gym.model.Gym;
 import salesianos.triana.dam.ChokeCheck.gym.service.GymService;
-import salesianos.triana.dam.ChokeCheck.post.dto.PostDto;
-import salesianos.triana.dam.ChokeCheck.post.model.Post;
 
 
 
@@ -30,9 +28,9 @@ public class GymController {
     private final GymService service;
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Obtains all the post paged", content = {
+            @ApiResponse(responseCode = "200", description = "Obtains all the Gym paged", content = {
                     @Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = Post.class)),
+                            array = @ArraySchema(schema = @Schema(implementation = GymResponse.class)),
                             examples = {@ExampleObject(
                                     value = """
                                                 {
@@ -58,7 +56,7 @@ public class GymController {
             @ApiResponse(responseCode = "401",
                     description = "Not logged user",
                     content = @Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = PostDto.class)),
+                            array = @ArraySchema(schema = @Schema(implementation = GymResponse.class)),
                             examples = {@ExampleObject(
                                     """
                                         {
@@ -70,7 +68,7 @@ public class GymController {
             @ApiResponse(responseCode = "403",
                     description = "Acces Denied",
                     content = @Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = PostDto.class)),
+                            array = @ArraySchema(schema = @Schema(implementation = GymResponse.class)),
                             examples = {@ExampleObject(
                                     """
                                     {
@@ -83,11 +81,45 @@ public class GymController {
                             )
                             }))
     })
-    @Operation(summary = "Find all the Posts", description = "Returns a paged list of all the post in the api")
+    @Operation(summary = "Find all the Gyms", description = "Returns a paged list of all the Gym in the api")
     @GetMapping()
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public MyPage<GymResponse> getAll(@PageableDefault(page = 0, size = 10) Pageable pageable){
         return service.getAll(pageable);
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "The Gym Created Correctly", content = {
+                    @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = Gym.class)),
+                            examples = {@ExampleObject(
+                                    value = """
+                                                {
+                                                    "id": "04a1f811-c826-48aa-a601-7f72bd614303",
+                                                    "type": "TRAINING",
+                                                    "authorName": "javi.prieto",
+                                                    "authorBelt": "RED",
+                                                    "likes": 1,
+                                                    "avgRate": 9.0,
+                                                    "title": "My First Ever Training",
+                                                    "content": "3x3min Jump Ropes,4x3min Pads,5x3min Sparring"
+                                                }
+                                            """
+                            )}
+                    )}),
+            @ApiResponse(responseCode = "400",
+                    description = "The body is not correct",
+                    content = @Content),
+            @ApiResponse(responseCode = "401",
+                    description = "Not logged user",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = GymResponse.class))))
+    })
+    @Operation(summary = "Create new Gym", description = "Create new Gym")
+    @PostMapping()
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public GymResponse createGym(@RequestBody @Valid GymRequest gymRequest){
+        return service.createGym(gymRequest);
     }
 
 }

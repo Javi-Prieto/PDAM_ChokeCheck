@@ -1,5 +1,5 @@
 
-<table class="table table-striped table-hover table-responsive align-middle">
+<table class="table table-striped table-hover table-responsive align-middle mb-0">
 	<thead>
 		<tr>
 			<th scope="col">Gym Id</th>
@@ -21,19 +21,74 @@
 				<td>{{ gym.avgBelt }}</td>
 				<td>{{ gym.latitude | number }}</td>
                 <td>{{ gym.altitude | number }}</td>
-                <td class="text-align-center">{{ gym.numberTournaments | number }}</td>
+                <td class="text-center">{{ gym.numberTournaments | number }}</td>
                 <td>Hola</td>
 			</tr>
 		}
 	</tbody>
 </table>
-
+<div class="fw-bold text-center display-5 w-100 mb-5 " id="addBtn" (click)="open(createGymModal)">
+	+
+</div>
 <div class="d-flex justify-content-center p-2 m-auto align-middle">
 	<ngb-pagination
-		[collectionSize]="gymsInfo.totalElements"
-		[(page)]="gymsInfo.pageNumber"
-		[pageSize]="gymsInfo.size"
+		[collectionSize]="gymsInfo == null ?  0: gymsInfo.totalElements"
+		[(page)]="gymsInfo == null ?  0: gymsInfo.pageNumber"
+		[pageSize]="gymsInfo == null ?  0: gymsInfo.size"
 		(pageChange)="refreshGyms()"
 	>
 	</ngb-pagination>
 </div>
+
+
+<ng-template #createGymModal let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title" id="modal-basic-title">Create new Gym</h4>
+		<button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+	</div>
+	<div class="modal-body d-flex justify-content-center">
+		<form>
+			<div class="mb-3">
+				<div class="mb-3">
+					<label for="gymName" class="form-label">Name of the gym</label>
+					<input type="text" class="form-control" id="gymName" name="gymName" aria-describedby="gymName" [(ngModel)]="gymName" required>
+					<div id="gNErr" class="text-danger">{{gymNameErr}}</div>
+				</div>
+				<div class="mb-3">
+					<label for="gymCity" class="form-label">City</label>
+					<input type="text" class="form-control" id="gymCity" name="gymCity" aria-describedby="gymCity" [(ngModel)]="gymCity" required>
+					<div id="gCErr" class="text-danger">{{gymCityErr}}</div>
+				</div>
+				<div class="mb-3 row">
+					<div class="col-6">
+						<label for="lat" class="form-label">Latitude</label>
+						<input type="number" class="form-control" id="lat" name="lat" aria-describedby="lat" [(ngModel)]="lat" required>
+						<div id="laErr" class="text-danger">{{latErr}}</div>
+					</div>
+					<div class="col-6">
+						<label for="lon" class="form-label">Longitude</label>
+						<input type="number" class="form-control" id="lon" name="lon" aria-describedby="lon" [(ngModel)]="lon" required>
+						<div id="loErr" class="text-danger">{{lonErr}}</div>
+					</div>
+				</div>
+				<div class="btn-lg mb-5 mt-4" ngbDropdown role="group" aria-label="Button group with nested dropdown">
+					<button type="button" class="btn btn-outline-secondary" ngbDropdownToggle>Select the gym Average Color</button>
+					<div class="dropdown-menu" ngbDropdownMenu>
+						<button ngbDropdownItem (click)="gymAvgBelt = 'WHITE'">White</button>
+						<button ngbDropdownItem (click)="gymAvgBelt = 'BLUE'">Blue</button>
+						<button ngbDropdownItem (click)="gymAvgBelt = 'PURPLE'">Purple</button>
+						<button ngbDropdownItem (click)="gymAvgBelt = 'BROWN'">Brown</button>
+						<button ngbDropdownItem (click)="gymAvgBelt = 'BLACK'">Black</button>
+						<button ngbDropdownItem (click)="gymAvgBelt = 'RED_BLACK'">Red Black</button>
+						<button ngbDropdownItem (click)="gymAvgBelt = 'RED_WHITE'">Red White</button>
+						<button ngbDropdownItem (click)="gymAvgBelt = 'RED'">Red</button>
+					</div>
+				</div>
+				<button type="button" class="btn btn-dark" (click)="toSave()">Guardar</button>
+				
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+	</div>
+</ng-template>
