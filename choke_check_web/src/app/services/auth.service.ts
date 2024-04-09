@@ -15,6 +15,7 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   login(username: any, password: any): Observable<any> {
+    localStorage.removeItem('TOKEN');
     return this.http.post(`${environment.apiBaseUrl}login`,
       {
         "username": username,

@@ -7,6 +7,7 @@ export interface GymListResponse {
     pageNumber:    number;
     first:         boolean;
     last:          boolean;
+    
 }
 
 export interface Gym {

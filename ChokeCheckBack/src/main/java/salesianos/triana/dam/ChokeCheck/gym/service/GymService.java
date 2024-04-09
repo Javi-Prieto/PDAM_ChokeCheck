@@ -5,9 +5,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import salesianos.triana.dam.ChokeCheck.assets.MyPage;
+import salesianos.triana.dam.ChokeCheck.gym.dto.GymRequest;
 import salesianos.triana.dam.ChokeCheck.gym.dto.GymResponse;
 import salesianos.triana.dam.ChokeCheck.gym.model.Gym;
 import salesianos.triana.dam.ChokeCheck.gym.repository.GymRepository;
+import salesianos.triana.dam.ChokeCheck.location.model.Location;
 
 import java.util.List;
 
@@ -22,5 +24,12 @@ public class GymService {
         List<Gym> result = repo.findAllPaged(all.getContent().stream().map(Gym::getId).toList());
         Page<GymResponse> toReturn = all.map(GymResponse::ofWithNoTournaments);
         return MyPage.of(toReturn, result.stream().map(GymResponse::of).toList());
+    }
+    public GymResponse createGym(GymRequest gymRequest){
+        Gym selected = GymRequest.from(gymRequest);
+        Location selectedLoc = GymRequest.locationFrom(gymRequest);
+        selected.addLocation(selectedLoc);
+        repo.save(selected);
+        return GymResponse.of(selected);
     }
 }
