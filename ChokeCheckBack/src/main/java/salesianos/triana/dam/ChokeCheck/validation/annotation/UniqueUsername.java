@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 @Documented
 public @interface UniqueUsername {
 
-    String message() default "Nombre de usuario en uso";
+    String message() default "Used username";
 
     Class<?>[] groups() default {};
 

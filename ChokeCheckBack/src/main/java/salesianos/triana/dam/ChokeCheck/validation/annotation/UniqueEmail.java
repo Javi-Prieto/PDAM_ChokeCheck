@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 @Documented
 public @interface UniqueEmail {
 
-    String message() default "email ya registrado";
+    String message() default "Almost registered email";
 
     Class<?>[] groups() default {};
 

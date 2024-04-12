@@ -1,4 +1,4 @@
-<table class="table table-striped table-hover table-responsive align-middle">
+<table class="table table-striped table-hover table-responsive align-middle mb-0">
 	<thead>
 		<tr>
 			<th scope="col">Id</th>
@@ -30,7 +30,9 @@
 		}
 	</tbody>
 </table>
-
+<div class="fw-bold text-center display-5 w-100 mb-5 " id="addBtn" (click)="open(createUserModal)">
+	+
+</div>
 <div class="d-flex justify-content-center p-2 m-auto align-middle">
 	<ngb-pagination
 		[collectionSize]="usersInfo.totalElements"
@@ -40,3 +42,109 @@
 	>
 	</ngb-pagination>
 </div>
+<ng-template #createUserModal let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title" id="modal-basic-title">Create new Gym</h4>
+		<button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+	</div>
+	<div class="modal-body d-flex justify-content-center">
+		<form>
+			<div class="mb-3">
+				<div class="mb-3">
+					<label for="userName" class="form-label">Username</label>
+					<input type="text" class="form-control" id="userName" name="userName" aria-describedby="userName" [(ngModel)]="userName" required>
+					<div id="gNErr" class="text-danger">{{userNameErr}}</div>
+				</div>
+				<div class="mb-3 row">
+					<div class="col-6">
+						<div class="mb-3">
+							<label for="name" class="form-label">Name</label>
+							<input type="text" class="form-control" id="name" name="name" aria-describedby="name" [(ngModel)]="name" required>
+							<div id="nErr" class="text-danger">{{nameErr}}</div>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="mb-3">
+							<label for="surName" class="form-label">Surname</label>
+							<input type="text" class="form-control" id="surName" name="userName" aria-describedby="surName" [(ngModel)]="surName" required>
+							<div id="surNErr" class="text-danger">{{surNameErr}}</div>
+						</div>
+					</div>
+					
+					
+				</div>
+				<div class="mb-3">
+					<label for="password" class="form-label">Password</label>
+					<input type="password" class="form-control" id="password" name="password" aria-describedby="password" [(ngModel)]="password" required>
+					<div id="password" class="text-danger">{{passwordErr}}</div>
+				</div>
+				<div class="mb-3">
+					<label for="email" class="form-label">Email</label>
+					<input type="text" class="form-control" id="email" name="email" aria-describedby="email" [(ngModel)]="email" required>
+					<div id="emailErr" class="text-danger">{{emailErr}}</div>
+				</div>
+				<div class="mb-3 row">
+					<div class="col-4">
+						<div class="mb-3">
+							<label for="height" class="form-label">Height</label>
+							<input type="number" class="form-control" id="height" name="height" aria-describedby="height" [(ngModel)]="height" required>
+							<div id="heightErr" class="text-danger">{{heightErr}}</div>
+						</div>
+					</div>
+					<div class="col-4">
+						<div class="mb-3">
+							<label for="age" class="form-label">Age</label>
+							<input type="number" class="form-control" id="age" name="height" aria-describedby="age" [(ngModel)]="age" required>
+							<div id="ageErr" class="text-danger">{{ageErr}}</div>
+						</div>
+					</div>
+					<div class="col-4">
+						<div class="mb-3">
+							<label for="weight" class="form-label">Weight</label>
+							<input type="number" class="form-control" id="weight" name="weight" aria-describedby="weight" [(ngModel)]="weight" required>
+							<div id="weightErr" class="text-danger">{{weightErr}}</div>
+						</div>
+					</div>
+					
+					
+				</div>
+				<div class="mb-3 row">
+					<div class="col-6">
+						<select class="form-select" aria-label="Default select example">
+							<option selected disabled>Select the user belt</option>
+							<option (click)="userBelt = 'WHITE'">White</option>
+							<option (click)="userBelt = 'BLUE'">Blue</option>
+							<option (click)="userBelt = 'PURPLE'">Purple</option>
+							<option (click)="userBelt = 'BROWN'" value="3">Brown</option>
+							<option (click)="userBelt = 'BLACK'" value="3">Black</option>
+							<option (click)="userBelt = 'RED_BLACK'" value="3">Red Black</option>
+							<option (click)="userBelt = 'RED_WHITE'" value="3">Red White</option>
+							<option (click)="userBelt = 'RED'" value="3">Red</option>
+						</select>
+					</div>
+					<div class="col-6">
+						<select class="form-select" aria-label="Default select example">
+							<option selected disabled>Select the user sex</option>
+							<option (click)="userSex = 0">Male</option>
+							<option (click)="userSex = 1">Female</option>
+						</select>
+					</div>
+					
+					
+				</div>
+				<div class="mb-3">
+					<select class="form-select" aria-label="Default select example">
+						<option selected disabled>Select the user rol</option>
+						<option (click)="userRol = 0">Admin</option>
+						<option (click)="userRol = 1">User</option>
+					</select>
+				</div>
+				
+				<button type="button" class="btn btn-dark" (click)="toSave()">Guardar</button>
+				
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+	</div>
+</ng-template>
