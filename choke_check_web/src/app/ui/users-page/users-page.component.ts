@@ -40,4 +40,7 @@ export class UsersPageComponent {
 			},
 		);
 	}
+  toSave(){
+    throw new Error('Method not implemented.');
+  }
 }

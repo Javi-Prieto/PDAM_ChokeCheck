@@ -51,40 +51,67 @@
 		<form>
 			<div class="mb-3">
 				<div class="mb-3">
-					<label for="userName" class="form-label">Name of the gym</label>
+					<label for="userName" class="form-label">Username</label>
 					<input type="text" class="form-control" id="userName" name="userName" aria-describedby="userName" [(ngModel)]="userName" required>
 					<div id="gNErr" class="text-danger">{{userNameErr}}</div>
 				</div>
+				<div class="mb-3 row">
+					<div class="mb-3">
+						<label for="name" class="form-label">Name</label>
+						<input type="text" class="form-control" id="name" name="name" aria-describedby="name" [(ngModel)]="name" required>
+						<div id="nErr" class="text-danger">{{nameErr}}</div>
+					</div>
+					<div class="mb-3">
+						<label for="surName" class="form-label">Surname</label>
+						<input type="text" class="form-control" id="surName" name="userName" aria-describedby="surName" [(ngModel)]="surName" required>
+						<div id="surNErr" class="text-danger">{{surNameErr}}</div>
+					</div>
+				</div>
 				<div class="mb-3">
-					<label for="gymCity" class="form-label">City</label>
-					<input type="text" class="form-control" id="gymCity" name="gymCity" aria-describedby="gymCity" [(ngModel)]="gymCity" required>
-					<div id="gCErr" class="text-danger">{{gymCityErr}}</div>
+					<label for="password" class="form-label">Password</label>
+					<input type="password" class="form-control" id="password" name="password" aria-describedby="password" [(ngModel)]="password" required>
+					<div id="password" class="text-danger">{{passwordErr}}</div>
+				</div>
+				<div class="mb-3">
+					<label for="email" class="form-label">Email</label>
+					<input type="text" class="form-control" id="email" name="email" aria-describedby="email" [(ngModel)]="email" required>
+					<div id="emailErr" class="text-danger">{{emailErr}}</div>
 				</div>
 				<div class="mb-3 row">
-					<div class="col-6">
-						<label for="lat" class="form-label">Latitude</label>
-						<input type="number" class="form-control" id="lat" name="lat" aria-describedby="lat" [(ngModel)]="lat" required>
-						<div id="laErr" class="text-danger">{{latErr}}</div>
+					<div class="mb-3">
+						<label for="height" class="form-label">Height</label>
+						<input type="number" class="form-control" id="height" name="height" aria-describedby="height" [(ngModel)]="height" required>
+						<div id="heightErr" class="text-danger">{{heightErr}}</div>
 					</div>
-					<div class="col-6">
-						<label for="lon" class="form-label">Longitude</label>
-						<input type="number" class="form-control" id="lon" name="lon" aria-describedby="lon" [(ngModel)]="lon" required>
-						<div id="loErr" class="text-danger">{{lonErr}}</div>
-					</div>
-				</div>
-				<div class="btn-lg mb-5 mt-4" ngbDropdown role="group" aria-label="Button group with nested dropdown">
-					<button type="button" class="btn btn-outline-secondary" ngbDropdownToggle>Select the gym Average Color</button>
-					<div class="dropdown-menu" ngbDropdownMenu>
-						<button ngbDropdownItem (click)="gymAvgBelt = 'WHITE'">White</button>
-						<button ngbDropdownItem (click)="gymAvgBelt = 'BLUE'">Blue</button>
-						<button ngbDropdownItem (click)="gymAvgBelt = 'PURPLE'">Purple</button>
-						<button ngbDropdownItem (click)="gymAvgBelt = 'BROWN'">Brown</button>
-						<button ngbDropdownItem (click)="gymAvgBelt = 'BLACK'">Black</button>
-						<button ngbDropdownItem (click)="gymAvgBelt = 'RED_BLACK'">Red Black</button>
-						<button ngbDropdownItem (click)="gymAvgBelt = 'RED_WHITE'">Red White</button>
-						<button ngbDropdownItem (click)="gymAvgBelt = 'RED'">Red</button>
+					<div class="mb-3">
+						<label for="weight" class="form-label">Weight</label>
+						<input type="number" class="form-control" id="weight" name="weight" aria-describedby="weight" [(ngModel)]="weight" required>
+						<div id="weightErr" class="text-danger">{{weightErr}}</div>
 					</div>
 				</div>
+				<div class="mb-3 row">
+					<div class="btn-lg mb-5 mt-4" ngbDropdown role="group" aria-label="Button group with nested dropdown">
+						<button type="button" class="btn btn-outline-secondary" ngbDropdownToggle>Select the user belt</button>
+						<div class="dropdown-menu" ngbDropdownMenu>
+							<button ngbDropdownItem (click)="userGym = 'WHITE'">White</button>
+							<button ngbDropdownItem (click)="userGym = 'BLUE'">Blue</button>
+							<button ngbDropdownItem (click)="userGym = 'PURPLE'">Purple</button>
+							<button ngbDropdownItem (click)="userGym = 'BROWN'">Brown</button>
+							<button ngbDropdownItem (click)="userGym = 'BLACK'">Black</button>
+							<button ngbDropdownItem (click)="userGym = 'RED_BLACK'">Red Black</button>
+							<button ngbDropdownItem (click)="userGym = 'RED_WHITE'">Red White</button>
+							<button ngbDropdownItem (click)="userGym = 'RED'">Red</button>
+						</div>
+					</div>
+					<div class="btn-lg mb-5 mt-4" ngbDropdown role="group" aria-label="Button group with nested dropdown">
+						<button type="button" class="btn btn-outline-secondary" ngbDropdownToggle>Select the user sex</button>
+						<div class="dropdown-menu" ngbDropdownMenu>
+							<button ngbDropdownItem (click)="userSex = 0">Male</button>
+							<button ngbDropdownItem (click)="userSex = 1">Female</button>
+						</div>
+					</div>
+				</div>
+				
 				<button type="button" class="btn btn-dark" (click)="toSave()">Guardar</button>
 				
 			</div>
