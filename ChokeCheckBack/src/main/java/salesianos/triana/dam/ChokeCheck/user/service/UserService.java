@@ -7,10 +7,7 @@ import org.springframework.stereotype.Service;
 import salesianos.triana.dam.ChokeCheck.assets.MyPage;
 import salesianos.triana.dam.ChokeCheck.error.exception.NotFoundException;
 import salesianos.triana.dam.ChokeCheck.post.service.PostService;
-import salesianos.triana.dam.ChokeCheck.user.dto.EditUser;
-import salesianos.triana.dam.ChokeCheck.user.dto.UserDetailResponse;
-import salesianos.triana.dam.ChokeCheck.user.dto.UserListResponse;
-import salesianos.triana.dam.ChokeCheck.user.dto.UserRegister;
+import salesianos.triana.dam.ChokeCheck.user.dto.*;
 import salesianos.triana.dam.ChokeCheck.user.model.BeltColor;
 import salesianos.triana.dam.ChokeCheck.user.model.User;
 import salesianos.triana.dam.ChokeCheck.user.model.UserRole;
@@ -46,6 +43,18 @@ public class UserService {
         User user = UserRegister.fromUserRegister(u);
         user.setPassword(passwordEncoder.encode(u.getPassword()));
         user.setRoles(Set.of(UserRole.USER));
+        return Optional.of(
+                repo.save(user)
+        );
+    }
+    public Optional<User> saveAnyUser(CreateUserRequest u){
+        User user = CreateUserRequest.fromCreateUserRequest(u);
+        user.setPassword(passwordEncoder.encode(u.getPassword()));
+        if (u.getRol() == 0)
+            user.setRoles(Set.of(UserRole.ADMIN));
+        else
+            user.setRoles(Set.of(UserRole.ADMIN));
+
         return Optional.of(
                 repo.save(user)
         );

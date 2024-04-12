@@ -280,6 +280,33 @@ public class UserController {
                     description = "Los datos introducidos no son válidos",
                     content = @Content)
     })
+    @PostMapping("/register/admin")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<UserListResponse> saveAdmin(@Valid @RequestBody CreateUserRequest u){
+        User created = userService.saveAnyUser(u).orElseThrow();
+        return ResponseEntity.status(HttpStatus.CREATED).body(UserListResponse.of(created));
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "El usuario se ha creado correctamente", content = {
+                    @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = User.class)),
+                            examples = {@ExampleObject(
+                                    value = """
+                                                {
+                                                    "id": "1ce9c1c7-7a02-4c7f-bf69-6d0306cbed68",
+                                                    "username": "javi.prieto",
+                                                    "userBeltColor": "RED",
+                                                    "rol": "ADMIN",
+                                                    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxY2U5YzFjNy03YTAyLTRjN2YtYmY2OS02ZDAzMDZjYmVkNjgiLCJpYXQiOjE3MDg2ODU0ODEsImV4cCI6MTcwODc3MTg4MX0.fwfNi-hvl502DxUXHC0gBbX26mb9MkO_N_4KEzELl5vO3Vsq9JENvZBTHx47aIxm6iHaWSAWBPjFIKldlFGx4g"
+                                                }
+                                            """
+                            )}
+                    )}),
+            @ApiResponse(responseCode = "400",
+                    description = "Los datos introducidos no son válidos",
+                    content = @Content)
+    })
     @PutMapping("/edit/my_profile")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> editMyProfile(@Valid @RequestBody EditUser u){
