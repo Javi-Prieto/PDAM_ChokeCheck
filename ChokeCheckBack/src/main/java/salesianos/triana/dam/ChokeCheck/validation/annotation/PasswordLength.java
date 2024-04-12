@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 @Documented
 public @interface PasswordLength {
 
-    String message() default "La contraseña es demasiado corta";
+    String message() default "The password is too short";
 
     Class<?>[] groups() default {};
 

@@ -11,7 +11,7 @@ export class CreateUserRequest{
     rol: Number;
     sex: Number;
 
-    constructor(username: string, password: string, name: string, surname: string, height: number, weight: number, email: string, age: number, beltColor: string, rol: number, sex: number) {
+    constructor(username: String, password: String, name: String, surname: String, height: Number, weight: Number, email: String, age: Number, beltColor: String, rol: Number, sex: Number) {
         this.username = username;
         this.password = password;
         this.name = name;

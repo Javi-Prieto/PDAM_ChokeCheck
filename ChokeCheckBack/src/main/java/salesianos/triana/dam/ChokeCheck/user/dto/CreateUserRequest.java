@@ -19,8 +19,8 @@ import salesianos.triana.dam.ChokeCheck.validation.annotation.UniqueUsername;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateUserRequest {
-    @NotNull(message = "El nombre de usuario no puede ser nulo")
-    @NotEmpty(message = "El nombre de usuario no puede estar vacío")
+    @NotNull(message = "The username could not be null")
+    @NotEmpty(message = "The username could not be empty")
     @UniqueUsername
     protected String username;
 
@@ -39,14 +39,14 @@ public class CreateUserRequest {
     private int weight;
 
 
-    @NotNull(message = "El email no puede ser nulo")
-    @NotEmpty(message = "El email no puede estar vacío")
-    @Email(message = "{CreateUserRequest.email.notanemail}")
+    @NotNull(message = "The email could not be null")
+    @NotEmpty(message = "The email could not be empty")
+    @Email(message = "This is not a correct email")
     @UniqueEmail
     private String email;
 
-    @NotNull(message = "La contraseña no puede ser nula")
-    @NotEmpty(message = "{CreateUserRequest.password.notempty}")
+    @NotNull(message = "The password could not be null")
+    @NotEmpty(message = "The password could not be empty")
     @PasswordLength
     private String password;
 
