@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -20,6 +21,7 @@ import salesianos.triana.dam.ChokeCheck.assets.MyPage;
 import salesianos.triana.dam.ChokeCheck.error.exception.NotBeltLevelException;
 import salesianos.triana.dam.ChokeCheck.post.dto.PostDto;
 import salesianos.triana.dam.ChokeCheck.rate.model.Rate;
+import salesianos.triana.dam.ChokeCheck.tournament.dto.CreateTournament;
 import salesianos.triana.dam.ChokeCheck.tournament.dto.TournamentDto;
 import salesianos.triana.dam.ChokeCheck.tournament.jsonView.TournamentViews;
 import salesianos.triana.dam.ChokeCheck.tournament.model.Tournament;
@@ -82,6 +84,7 @@ public class TournamentController {
         User logged = (User) auth.getPrincipal();
         return service.getAll(logged, pageable);
     }
+
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Obtains all the Tournament paged", content = {
                     @Content(mediaType = "application/json",
@@ -208,6 +211,71 @@ public class TournamentController {
         return service.getById(id, logged);
     }
 
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "201", description = "Tournament created correctly", content = {
+//                    @Content(mediaType = "application/json",
+//                            array = @ArraySchema(schema = @Schema(implementation = Tournament.class)),
+//                            examples = {@ExampleObject(
+//                                    value = """
+//                                                {
+//                                                    "content": [
+//                                                        {
+//                                                                    "title": "Sparring Time",
+//                                                                    "date": "2024-12-01 17:30:15",
+//                                                                    "participants": 8,
+//                                                                    "applied": 0,
+//                                                                    "higherBelt": "RED_WHITE",
+//                                                                    "prize": 0.0,
+//                                                                    "author": "Sutemi MMA"
+//                                                        }
+//                                                    ],
+//                                                    "size": 10,
+//                                                    "totalElements": 1,
+//                                                    "pageNumber": 0,
+//                                                    "first": true,
+//                                                    "last": true
+//                                                }
+//                                            """
+//                            )}
+//                    )}),
+//            @ApiResponse(responseCode = "401",
+//                    description = "Not logged user",
+//                    content = @Content(mediaType = "application/json",
+//                            array = @ArraySchema(schema = @Schema(implementation = Tournament.class)),
+//                            examples = {@ExampleObject(
+//                                    """
+//                                        {
+//                                            "error": "You can not do this"
+//                                        }
+//                                    """
+//                            )
+//                            })),
+//            @ApiResponse(responseCode = "400",
+//                    description = "Invalid data",
+//                    content = @Content(mediaType = "application/json",
+//                            array = @ArraySchema(schema = @Schema(implementation = Tournament.class)),
+//                            examples = {@ExampleObject(
+//                                    """
+//                                        {
+//                                            "error": "Not valid data"
+//                                        }
+//                                    """
+//                            )
+//                            }))
+//    })
+//    @Operation(summary = "Create tournament", description = "Create a new Tournament")
+//    @JsonView(TournamentViews.TournamentList.class)
+//    @PostMapping()
+//    public ResponseEntity<?> createTournament(@Valid @RequestBody CreateTournament createTournament){
+//        return ResponseEntity.status(201).body(service.createTournament(createTournament));
+//    }
+
+    @PostMapping()
+   public ResponseEntity<?> createTournament(@RequestBody @Valid CreateTournament createTournament){
+        return ResponseEntity.status(201).body(service.createTournament(createTournament));
+   }
+
+
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "The Rate Created Correctly", content = {
                     @Content(mediaType = "application/json",
@@ -245,8 +313,8 @@ public class TournamentController {
                     content = @Content(mediaType = "application/json",
                             array = @ArraySchema(schema = @Schema(implementation = Tournament.class))))
     })
-    @PostMapping("/apply/{id}")
-    @JsonView(TournamentViews.TournamentDetail.class)
+                                              @PostMapping("/apply/{id}")
+                                              @JsonView(TournamentViews.TournamentDetail.class)
     public ResponseEntity<?> createApply(@PathVariable UUID id) throws NotBeltLevelException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User logged = (User) auth.getPrincipal();

@@ -34,6 +34,9 @@
 		}
 	</tbody>
 </table>
+<div class="fw-bold text-center display-5 w-100 mb-5 " id="addBtn" (click)="open(createGymModal)">
+	+
+</div>
 
 <div class="d-flex justify-content-center p-2 m-auto align-middle">
 	<ngb-pagination
@@ -44,3 +47,94 @@
 	>
 	</ngb-pagination>
 </div>
+
+<ng-template #createGymModal let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title" id="modal-basic-title">Create new Tournament</h4>
+		<button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+	</div>
+	<div class="modal-body d-flex justify-content-center">
+		<form>
+			<div class="mb-3">
+				<div class="mb-3">
+					<label for="tournamentTitle" class="form-label">Title of the gym</label>
+					<input type="text" class="form-control" id="tournamentTitle" name="tournamentTitle" aria-describedby="tournamentTitle" [(ngModel)]="tournamentTitle" required>
+					<div id="gNErr" class="text-danger">{{tournamentTitleErr}}</div>
+				</div>
+				<div class="col-6">
+					<label for="tournDesc" class="form-label">Tournament description</label>
+					<input type="text" class="form-control" id="tournDesc" name="tournDesc" aria-describedby="tournDesc" [(ngModel)]="tournDesc" required>
+					<div id="tournDescErr" class="text-danger">{{tournDescErr}}</div>
+				</div>
+				<div class="mb-3">
+					<label for="tournDate" class="form-label">Start date</label>
+					<input type="datetime-local" class="form-control" id="tournDate" name="tournDate" aria-describedby="tournDate" [(ngModel)]="tournDate" required>
+					<div id="gCErr" class="text-danger">{{tournDateErr}}</div>
+				</div>
+				<div class="mb-3 row">
+					<div class="col-6">
+						<label for="cost" class="form-label">Cost</label>
+						<input type="number" class="form-control" id="cost" name="cost" aria-describedby="cost" [(ngModel)]="cost" required>
+						<div id="costErr" class="text-danger">{{costErr}}</div>
+					</div>
+					<div class="col-6">
+						<label for="prize" class="form-label">Prize</label>
+						<input type="number" class="form-control" id="prize" name="prize" aria-describedby="prize" [(ngModel)]="prize" required>
+						<div id="prizeErr" class="text-danger">{{prizeErr}}</div>
+					</div>
+				</div>
+				<div class="mb-3 row">
+					<div class="col-4">
+						<label for="minWeight" class="form-label">Min Weight</label>
+						<input type="number" class="form-control" id="minWeight" name="minWeight" aria-describedby="minWeight" [(ngModel)]="minWeight" required>
+						<div id="minWeightErr" class="text-danger">{{minWeightErr}}</div>
+					</div>
+					<div class="col-4">
+						<label for="maxWeight" class="form-label">Max Weight</label>
+						<input type="number" class="form-control" id="maxWeight" name="maxWeight" aria-describedby="maxWeight" [(ngModel)]="maxWeight" required>
+						<div id="maxWeightErr" class="text-danger">{{maxWeightErr}}</div>
+					</div>
+					<div class="col-4">
+						<label for="participants" class="form-label">Participants</label>
+						<input type="number" class="form-control" id="participants" name="participants" aria-describedby="participants" [(ngModel)]="participants" required>
+						<div id="participantsErr" class="text-danger">{{participantsErr}}</div>
+					</div>
+				</div>
+				<div class="mb-3 row">
+					<div class="col-6">
+						<select class="form-select" aria-label="Default select example">
+							<option selected disabled>Higher Belt</option>
+							<option (click)="tournHigherBelt = 'WHITE'">White</option>
+							<option (click)="tournHigherBelt = 'BLUE'">Blue</option>
+							<option (click)="tournHigherBelt = 'PURPLE'">Purple</option>
+							<option (click)="tournHigherBelt = 'BROWN'" value="3">Brown</option>
+							<option (click)="tournHigherBelt = 'BLACK'" value="3">Black</option>
+							<option (click)="tournHigherBelt = 'RED_BLACK'" value="3">Red Black</option>
+							<option (click)="tournHigherBelt = 'RED_WHITE'" value="3">Red White</option>
+							<option (click)="tournHigherBelt = 'RED'" value="3">Red</option>
+						</select>
+					</div>
+					<div class="col-6">
+						<select class="form-select" aria-label="Default select example">
+							<option selected disabled>Sex</option>
+							<option (click)="tournSex = 0">Male</option>
+							<option (click)="tournSex = 1">Female</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-6 mb-3">
+					<select class="form-select" aria-label="Default select example">
+						<option selected disabled>Gym</option>
+						@for(gym of gyms; track gym.id){
+							<option (click)="creatorGymId = gym.id">{{gym.name}}</option>
+						}
+					</select>
+				</div>
+				<button type="button" class="btn btn-dark" (click)="toSave()">Guardar</button>
+				
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+	</div>
+</ng-template>

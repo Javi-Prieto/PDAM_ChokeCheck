@@ -66,4 +66,9 @@ public class Tournament {
         this.applies.removeIf(a -> a.getId().getTournament().getId().equals(apply.getTournament().getId()) &&
                 a.getId().getAuthor().getId().equals(apply.getAuthor().getId()));
     }
+
+    public void addAuthor(Gym author){
+        this.author = author;
+        author.getTournaments().add(this);
+    }
 }
