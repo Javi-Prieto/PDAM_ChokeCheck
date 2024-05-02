@@ -9,8 +9,11 @@ import salesianos.triana.dam.ChokeCheck.apply.model.ApplyPk;
 import salesianos.triana.dam.ChokeCheck.assets.MyPage;
 import salesianos.triana.dam.ChokeCheck.error.exception.NotBeltLevelException;
 import salesianos.triana.dam.ChokeCheck.error.exception.NotFoundException;
+import salesianos.triana.dam.ChokeCheck.gym.model.Gym;
+import salesianos.triana.dam.ChokeCheck.gym.repository.GymRepository;
 import salesianos.triana.dam.ChokeCheck.rate.dto.RateDto;
 import salesianos.triana.dam.ChokeCheck.rate.model.Rate;
+import salesianos.triana.dam.ChokeCheck.tournament.dto.CreateTournament;
 import salesianos.triana.dam.ChokeCheck.tournament.dto.TournamentDto;
 import salesianos.triana.dam.ChokeCheck.tournament.model.Tournament;
 import salesianos.triana.dam.ChokeCheck.tournament.repository.TournamentRepository;
@@ -25,6 +28,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class TournamentService {
     private final TournamentRepository repo;
+    private final GymRepository gymRepository;
     public MyPage<TournamentDto> getAll(Pageable pageable){
         Page<Tournament> all = repo.findAll(pageable);
         List<Tournament> result = repo.getAllIds(all.getContent().stream().map(Tournament::getId).toList());
@@ -43,6 +47,16 @@ public class TournamentService {
         Optional<Tournament> selected = repo.findByIdWithApplies(id);
         if (selected.isEmpty()) throw new NotFoundException("Tournament");
         return TournamentDto.of(selected.get(), user);
+    }
+
+    public TournamentDto createTournament(CreateTournament createTournament){
+        Tournament newTournament = CreateTournament.of(createTournament);
+        Optional<Gym> author = gymRepository.findById(createTournament.authorGymId());
+        if(author.isEmpty()) throw new NotFoundException("Gym");
+        newTournament.addAuthor(author.get());
+        gymRepository.save(author.get());
+        repo.save(newTournament);
+        return TournamentDto.ofTable(newTournament);
     }
 
     public TournamentDto addApply(UUID uuid, User user) throws NotBeltLevelException {
