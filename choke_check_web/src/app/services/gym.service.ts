@@ -26,4 +26,8 @@ export class GymService {
   }
   )
   }
+
+  deleteGym(gymId:String):Observable<any>{
+    return this.http.delete(`${environment.apiBaseUrl}gym/${gymId}`)
+  }
 }

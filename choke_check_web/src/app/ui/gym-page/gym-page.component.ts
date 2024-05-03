@@ -86,4 +86,14 @@ export class GymPageComponent implements OnInit {
     });
   }
 
+  deleteGym(gymId:String){
+    this.gymService.deleteGym(gymId).subscribe({
+      next: data=> {
+        window.location.href = `${environment.localHost}gym`
+      }, error: err => {
+        console.log(err.error.message);
+      }
+    });
+  }
+
 }
