@@ -110,4 +110,15 @@ export class TournamentsPageComponent {
       }
     });
   }
+  
+  deleteTournament(tournamentId: String){
+    this.tournamentService.deleteTournament(tournamentId).subscribe({
+      next: data=> {
+        window.location.href = `${environment.localHost}tournament`
+      }, error: err => {
+        console.log(err.error.message);
+        
+      }
+    });
+  }
 }

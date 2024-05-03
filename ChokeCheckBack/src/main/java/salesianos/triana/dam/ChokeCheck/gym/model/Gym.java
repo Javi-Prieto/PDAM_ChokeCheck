@@ -42,11 +42,14 @@ public class Gym {
     private Location location;
     private BeltColor avgLevel;
 
-    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY, orphanRemoval = true)
     @Builder.Default
     private List<Tournament> tournaments = new ArrayList<Tournament>();
 
     public void addLocation(Location location){
         this.location = location;
+    }
+    public void removeTournament(Tournament tournament){
+        this.tournaments.removeIf(t -> t.getId().equals(tournament.getId()));
     }
 }

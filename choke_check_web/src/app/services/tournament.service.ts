@@ -33,4 +33,7 @@ export class TournamentService {
   }
     )
   }
+  deleteTournament(tournamentId:String):Observable<any>{
+    return this.http.delete(`${environment.apiBaseUrl}tournament/${tournamentId}`);
+  }
 }

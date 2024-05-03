@@ -19,6 +19,7 @@ import salesianos.triana.dam.ChokeCheck.tournament.model.Tournament;
 import salesianos.triana.dam.ChokeCheck.tournament.repository.TournamentRepository;
 import salesianos.triana.dam.ChokeCheck.user.model.BeltColor;
 import salesianos.triana.dam.ChokeCheck.user.model.User;
+import salesianos.triana.dam.ChokeCheck.user.repository.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +30,7 @@ import java.util.UUID;
 public class TournamentService {
     private final TournamentRepository repo;
     private final GymRepository gymRepository;
+    private final UserRepository userRepository;
     public MyPage<TournamentDto> getAll(Pageable pageable){
         Page<Tournament> all = repo.findAll(pageable);
         List<Tournament> result = repo.getAllIds(all.getContent().stream().map(Tournament::getId).toList());
@@ -97,5 +99,17 @@ public class TournamentService {
             case RED_WHITE -> 6;
             case RED -> 7;
         };
+    }
+
+    public void deleteTournament(UUID id){
+        Optional< Tournament> selected = repo.findByIdWithApplies(id);
+        if(selected.isEmpty()) throw new NotFoundException("Tournament");
+        Tournament tournament = selected.get();
+        tournament.getApplies().forEach(tournament::deleteApply);
+        repo.save(tournament);
+        Gym author = tournament.getAuthor();
+        author.removeTournament(tournament);
+        gymRepository.save(author);
+        repo.delete(tournament);
     }
 }

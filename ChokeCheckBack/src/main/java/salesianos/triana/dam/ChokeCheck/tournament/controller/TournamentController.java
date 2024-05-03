@@ -18,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import salesianos.triana.dam.ChokeCheck.assets.MyPage;
+import salesianos.triana.dam.ChokeCheck.error.exception.NotAuthorException;
 import salesianos.triana.dam.ChokeCheck.error.exception.NotBeltLevelException;
 import salesianos.triana.dam.ChokeCheck.post.dto.PostDto;
 import salesianos.triana.dam.ChokeCheck.rate.model.Rate;
@@ -336,6 +337,23 @@ public class TournamentController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User logged = (User) auth.getPrincipal();
         service.deleteApply(id, logged);
+        return ResponseEntity.noContent().build();
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204",
+                    description = "The Tournament and it's applies deleted correctly",
+                    content = @Content
+            ),
+            @ApiResponse(responseCode = "404",
+                    description = "Not Found the Tournament to delete",
+                    content = @Content)
+    })
+    @Operation(summary = "Delete Tournament", description = "Returns 204 no content if everything is good ")
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> deleteTournament(@PathVariable UUID id) {
+        service.deleteTournament(id);
         return ResponseEntity.noContent().build();
     }
 
