@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import salesianos.triana.dam.ChokeCheck.assets.MyPage;
@@ -19,6 +20,7 @@ import salesianos.triana.dam.ChokeCheck.gym.dto.GymResponse;
 import salesianos.triana.dam.ChokeCheck.gym.model.Gym;
 import salesianos.triana.dam.ChokeCheck.gym.service.GymService;
 
+import java.util.UUID;
 
 
 @RestController
@@ -122,4 +124,20 @@ public class GymController {
         return service.createGym(gymRequest);
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204",
+                    description = "The Gym and it's applies deleted correctly",
+                    content = @Content
+            ),
+            @ApiResponse(responseCode = "404",
+                    description = "Not Found the Gym to delete",
+                    content = @Content)
+    })
+    @Operation(summary = "Delete Gym", description = "Returns 204 no content if everything is good ")
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> deleteGym(@PathVariable UUID id) {
+        service.deleteGym(id);
+        return ResponseEntity.noContent().build();
+    }
 }

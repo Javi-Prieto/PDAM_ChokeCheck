@@ -22,7 +22,11 @@
 				<td>{{ gym.latitude | number }}</td>
                 <td>{{ gym.altitude | number }}</td>
                 <td class="text-center">{{ gym.numberTournaments | number }}</td>
-                <td>Hola</td>
+                <td>
+					<button class="btn" (click)="deleteGym(gym.id)">
+						<i class="fa-regular fa-trash-can" style="color:red;"></i>
+					</button>
+				</td>
 			</tr>
 		}
 	</tbody>
