@@ -29,7 +29,11 @@
                 <td>{{ tournament.higherBelt }}</td>
                 <td>{{ tournament.minWeight }} - {{tournament.maxWeight}}</td>
                 <td>{{ tournament.city }}</td>
-                <td>Hola</td>
+                <td>
+					<button class="btn" (click)="deleteTournament(tournament.id)">
+						<i class="fa-regular fa-trash-can" style="color:red;"></i>
+					</button>
+				</td>
 			</tr>
 		}
 	</tbody>

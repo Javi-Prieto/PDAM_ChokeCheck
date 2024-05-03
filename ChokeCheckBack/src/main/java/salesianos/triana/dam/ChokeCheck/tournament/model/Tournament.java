@@ -56,7 +56,7 @@ public class Tournament {
     private Set<Apply> applies = new LinkedHashSet<>();
 
     @CreatedBy
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Gym author;
 
     public void addApply(Apply apply){
@@ -70,5 +70,9 @@ public class Tournament {
     public void addAuthor(Gym author){
         this.author = author;
         author.getTournaments().add(this);
+    }
+    public void deleteAuthor(){
+        this.author.getTournaments().remove(this);
+        this.author = null;
     }
 }
