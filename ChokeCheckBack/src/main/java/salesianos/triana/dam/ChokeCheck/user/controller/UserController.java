@@ -28,6 +28,7 @@ import salesianos.triana.dam.ChokeCheck.user.dto.*;
 import salesianos.triana.dam.ChokeCheck.user.model.User;
 import salesianos.triana.dam.ChokeCheck.user.service.UserService;
 
+import java.util.UUID;
 
 
 @RestController
@@ -315,5 +316,22 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.editUser(author, u));
     }
 
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204",
+                    description = "The User and it's applies deleted correctly",
+                    content = @Content
+            ),
+            @ApiResponse(responseCode = "404",
+                    description = "Not Found the User to delete",
+                    content = @Content)
+    })
+    @Operation(summary = "Delete User", description = "Returns 204 no content if everything is good ")
+    @DeleteMapping("/user/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> deleteUser(@PathVariable UUID id) {
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
+    }
 
 }

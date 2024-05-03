@@ -4,15 +4,23 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import salesianos.triana.dam.ChokeCheck.apply.model.Apply;
 import salesianos.triana.dam.ChokeCheck.assets.MyPage;
+import salesianos.triana.dam.ChokeCheck.error.exception.NotAuthorException;
 import salesianos.triana.dam.ChokeCheck.error.exception.NotFoundException;
+import salesianos.triana.dam.ChokeCheck.post.model.Post;
+import salesianos.triana.dam.ChokeCheck.post.repository.PostRepository;
 import salesianos.triana.dam.ChokeCheck.post.service.PostService;
+import salesianos.triana.dam.ChokeCheck.tournament.model.Tournament;
+import salesianos.triana.dam.ChokeCheck.tournament.repository.TournamentRepository;
+import salesianos.triana.dam.ChokeCheck.tournament.service.TournamentService;
 import salesianos.triana.dam.ChokeCheck.user.dto.*;
 import salesianos.triana.dam.ChokeCheck.user.model.BeltColor;
 import salesianos.triana.dam.ChokeCheck.user.model.User;
 import salesianos.triana.dam.ChokeCheck.user.model.UserRole;
 import salesianos.triana.dam.ChokeCheck.user.repository.UserRepository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -23,6 +31,9 @@ public class UserService {
     private final UserRepository repo;
     private final PasswordEncoder passwordEncoder;
     private final PostService postService;
+    private final PostRepository postRepository;
+    private final TournamentService tournamentService;
+    private final TournamentRepository tournamentRepository;
 
     public Optional<User> findById(UUID userId) {
         return repo.findById(userId);
@@ -92,5 +103,25 @@ public class UserService {
         if (beltColor.equals("PURPLE")) return BeltColor.PURPLE;
         if (beltColor.equals("BROWN")) return BeltColor.BROWN;
         return BeltColor.WHITE;
+    }
+
+    public void deleteUser(UUID id){
+        Optional<User> selected= repo.findById(id);
+        if(selected.isEmpty()) throw new NotFoundException("User");
+        List<Post> toDelete = postRepository.findAllByAuthorUsername(selected.get().getUsername());
+        toDelete.forEach((post)-> {
+            try {
+                postService.deletePost(post.getId(), selected.get());
+            } catch (NotAuthorException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        final List<Apply> appliesToDelete;
+        List<Tournament> allTourn = tournamentRepository.getAllIds(tournamentRepository.findAll().stream().map(Tournament::getId).toList());
+        allTourn.forEach(tournament -> {
+            tournamentService.deleteApply(tournament.getId(), selected.get());
+        });
+        repo.delete(selected.get());
+
     }
 }
