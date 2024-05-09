@@ -31,5 +31,9 @@ export class UserService {
       "rol": created.rol
   });
   }
+
+  deleteUser(id: String):Observable<any>{
+    return this.http.delete<any>(`${environment.apiBaseUrl}user/${id}`);
+  }
 }
 

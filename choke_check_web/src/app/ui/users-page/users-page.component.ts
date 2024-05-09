@@ -106,4 +106,14 @@ export class UsersPageComponent {
       }
     });
   }
+
+  deleteUser(id:String){
+    this.userService.deleteUser(id).subscribe({
+      next: data=> {
+        window.location.href = `${environment.localHost}users`
+      }, error: err => {
+        console.log(err.error.message);
+      }
+    });
+  }
 }
