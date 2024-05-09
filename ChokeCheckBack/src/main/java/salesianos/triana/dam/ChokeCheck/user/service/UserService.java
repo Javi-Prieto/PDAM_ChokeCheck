@@ -8,6 +8,7 @@ import salesianos.triana.dam.ChokeCheck.apply.model.Apply;
 import salesianos.triana.dam.ChokeCheck.assets.MyPage;
 import salesianos.triana.dam.ChokeCheck.error.exception.NotAuthorException;
 import salesianos.triana.dam.ChokeCheck.error.exception.NotFoundException;
+import salesianos.triana.dam.ChokeCheck.like.model.Like;
 import salesianos.triana.dam.ChokeCheck.post.model.Post;
 import salesianos.triana.dam.ChokeCheck.post.repository.PostRepository;
 import salesianos.triana.dam.ChokeCheck.post.service.PostService;
@@ -116,10 +117,17 @@ public class UserService {
                 throw new RuntimeException(e);
             }
         });
-        final List<Apply> appliesToDelete;
         List<Tournament> allTourn = tournamentRepository.getAllIds(tournamentRepository.findAll().stream().map(Tournament::getId).toList());
         allTourn.forEach(tournament -> {
-            tournamentService.deleteApply(tournament.getId(), selected.get());
+            if(tournament.getApplies().stream().map(Apply::getAuthor).map(User::getId).toList().contains(selected.get().getId())){
+                tournamentService.deleteApply(tournament.getId(), selected.get());
+            }
+        });
+        List<Post> toDeleteLikeRate = postRepository.findAll();
+        toDeleteLikeRate.forEach(post -> {
+            if(post.getLikes().stream().map(l -> l.getAuthor().getId()).toList().contains(selected.get().getId())){
+                postService.deleteLike(post.getId(), selected.get());
+            }
         });
         repo.delete(selected.get());
 
