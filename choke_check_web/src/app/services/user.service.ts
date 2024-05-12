@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CreateUserRequest } from '../models/request/create-user-request.interface';
+import { EditUserRequest } from '../models/request/edit-user-request.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +31,20 @@ export class UserService {
       "sex": created.sex,
       "rol": created.rol
   });
+  }
+
+  editUser(id:String, edit:EditUserRequest):Observable<any>{
+    return this.http.put<any>(`${environment.apiBaseUrl}user/edit/${id}`, {
+      "password" : edit.password,
+      "name" : edit.name,
+      "surname" : edit.surname,
+      "height" : edit.height,
+      "weight" : edit.weight,
+      "email" : edit.email,
+      "age" : edit.age,
+      "beltColor" : edit.beltColor,
+      "rol": edit.rol
+    });
   }
 
   deleteUser(id: String):Observable<any>{

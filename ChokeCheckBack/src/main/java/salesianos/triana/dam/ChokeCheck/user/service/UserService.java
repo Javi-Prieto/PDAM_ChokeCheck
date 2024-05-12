@@ -94,6 +94,27 @@ public class UserService {
         repo.save(ancient);
         return UserDetailResponse.of(ancient, postService.getAllPostByCreatorUsername(ancient.getUsername(), ancient));
     }
+
+    public UserDetailResponse editUser(EditAllUser newUser, UUID id){
+        Optional<User> selected = repo.findById(id);
+        if(selected.isEmpty()) throw  new NotFoundException("User");
+        User ancient = selected.get();
+        ancient.setAge(newUser.getAge());
+        ancient.setSex(newUser.getSex());
+        ancient.setHeight(newUser.getHeight());
+        ancient.setWeight(newUser.getWeight());
+        ancient.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        ancient.setName(newUser.getName());
+        ancient.setSurname(newUser.getSurname());
+        ancient.setBelt_color(getBeltColor(newUser.getBeltColor()));
+        ancient.setEmail(newUser.getEmail());
+        if (newUser.getRol() == 0)
+            ancient.setRoles(Set.of(UserRole.ADMIN));
+        else
+            ancient.setRoles(Set.of(UserRole.ADMIN));
+        repo.save(ancient);
+        return UserDetailResponse.of(ancient, postService.getAllPostByCreatorUsername(ancient.getUsername(), ancient));
+    }
     public static BeltColor getBeltColor(String beltColor){
         if (beltColor.equals("RED")) return BeltColor.RED;
         if (beltColor.equals("BLUE")) return BeltColor.BLUE;

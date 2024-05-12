@@ -26,6 +26,9 @@
                 <td>{{ user.height }}</td>
                 <td>{{ user.belt }}</td>
                 <td>
+					<button class="btn" (click)="openEditModal(user, createUserModal)">
+						<i class="fa-regular fa-pen-to-square" style="color:yellow;"></i>
+					</button>
 					<button class="btn" (click)="deleteUser(user.id)">
 						<i class="fa-regular fa-trash-can" style="color:red;"></i>
 					</button>
@@ -48,7 +51,7 @@
 </div>
 <ng-template #createUserModal let-modal>
 	<div class="modal-header">
-		<h4 class="modal-title" id="modal-basic-title">Create new Gym</h4>
+		<h4 class="modal-title" id="modal-basic-title">Create new User</h4>
 		<button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
 	</div>
 	<div class="modal-body d-flex justify-content-center">
@@ -56,7 +59,7 @@
 			<div class="mb-3">
 				<div class="mb-3">
 					<label for="userName" class="form-label">Username</label>
-					<input type="text" class="form-control" id="userName" name="userName" aria-describedby="userName" [(ngModel)]="userName" required>
+					<input type="text" class="form-control" id="userName" name="userName" aria-describedby="userName" [(ngModel)]="userName" required [disabled]="isEditting">
 					<div id="gNErr" class="text-danger">{{userNameErr}}</div>
 				</div>
 				<div class="mb-3 row">
@@ -70,7 +73,7 @@
 					<div class="col-6">
 						<div class="mb-3">
 							<label for="surName" class="form-label">Surname</label>
-							<input type="text" class="form-control" id="surName" name="userName" aria-describedby="surName" [(ngModel)]="surName" required>
+							<input type="text" class="form-control" id="surName" name="surName" aria-describedby="surName" [(ngModel)]="surName" required>
 							<div id="surNErr" class="text-danger">{{surNameErr}}</div>
 						</div>
 					</div>
@@ -98,7 +101,7 @@
 					<div class="col-4">
 						<div class="mb-3">
 							<label for="age" class="form-label">Age</label>
-							<input type="number" class="form-control" id="age" name="height" aria-describedby="age" [(ngModel)]="age" required>
+							<input type="number" class="form-control" id="age" name="age" aria-describedby="age" [(ngModel)]="age" required>
 							<div id="ageErr" class="text-danger">{{ageErr}}</div>
 						</div>
 					</div>
@@ -127,7 +130,7 @@
 						</select>
 					</div>
 					<div class="col-6">
-						<select class="form-select" aria-label="Default select example">
+						<select class="form-select" aria-label="Default select example" *ngIf="userName != ''">
 							<option selected disabled>Select the user sex</option>
 							<option (click)="userSex = 0">Male</option>
 							<option (click)="userSex = 1">Female</option>
