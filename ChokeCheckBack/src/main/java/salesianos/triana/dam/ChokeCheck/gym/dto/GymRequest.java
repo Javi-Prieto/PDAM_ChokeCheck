@@ -19,11 +19,11 @@ public record GymRequest(
         @NotBlank()
         @NotNull()
         String city,
-        @NotEmpty()
+        @NotNull()
         double lat,
-        @NotEmpty()
+        @NotNull()
         double lon,
-        @NotEmpty()
+        @NotNull()
         BeltColor beltColor
 ) {
     public static Gym from(GymRequest gymRequest){

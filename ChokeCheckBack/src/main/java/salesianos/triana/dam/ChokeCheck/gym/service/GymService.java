@@ -36,6 +36,17 @@ public class GymService {
         return GymResponse.of(selected);
     }
 
+    public GymResponse editGym(GymRequest newGym, UUID id){
+        Optional<Gym> selected = repo.findById(id);
+        if(selected.isEmpty())throw new NotFoundException("Gym");
+        Gym toEdit = selected.get();
+        Location newLocation = GymRequest.locationFrom(newGym);
+        toEdit.setName(newGym.name());
+        toEdit.setLocation(newLocation);
+        toEdit.setAvgLevel(newGym.beltColor());
+        return GymResponse.of(repo.save(toEdit));
+    }
+
     public void deleteGym(UUID gymId){
         Optional<Gym> selected = repo.findById(gymId);
         if(selected.isEmpty())throw new NotFoundException("Gym");
