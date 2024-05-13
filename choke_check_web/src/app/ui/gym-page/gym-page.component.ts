@@ -24,6 +24,8 @@ export class GymPageComponent implements OnInit {
   lon: number = 0;
   lonErr: String = '';
   gymAvgBelt !: String;
+  isEdit = false;
+  gymId: String = ''; 
 
   constructor(private gymService: GymService, private modalService: NgbModal){}
 
@@ -42,6 +44,10 @@ export class GymPageComponent implements OnInit {
   }
 
   open(content: TemplateRef<any>) {
+    this.gymName = '';
+    this.lon = 0;
+    this.lat = 0;
+    this.isEdit =false;
 		this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then(
 			(result) => {
 				console.log( `Closed with: ${result}`);
@@ -58,32 +64,61 @@ export class GymPageComponent implements OnInit {
 
   toSave() {
     let toSave = new CreateGymRequest(this.gymName, this.gymCity, this.lat, this.lon, this.gymAvgBelt);
-    this.gymService.createGym(toSave).subscribe({
-      next: data=> {
-        window.location.href = `${environment.localHost}gym`
-      }, error: err => {
-        if(err.status == 400){
-          let badReq = err.error;
-          console.log(badReq);
-          let errors = badReq.body.fields_errors;
-          errors.forEach((error: { field: string; message: string; }) => {
-            if(error.field == "name"){
-              this.gymNameErr = error.message;
-            }else if(error.field == "city"){
-              this.gymCityErr = error.message;
-            }else if(error.field == "lat"){
-              this.latErr = error.message;
-            }else if(error.field == "lon"){
-              this.lonErr = error.message;
-            }else if(error.field == "beltColor"){
-              console.log(error.message);
-            }else{
-              alert("NOOOOO MI PAGE");
-            }
-          });
+    if(this.isEdit){
+      this.gymService.editGym(this.gymId, toSave).subscribe({
+        next: data=> {
+          window.location.href = `${environment.localHost}gym`
+        }, error: err => {
+          if(err.status == 400){
+            let badReq = err.error;
+            console.log(badReq);
+            let errors = badReq.body.fields_errors;
+            errors.forEach((error: { field: string; message: string; }) => {
+              if(error.field == "name"){
+                this.gymNameErr = error.message;
+              }else if(error.field == "city"){
+                this.gymCityErr = error.message;
+              }else if(error.field == "lat"){
+                this.latErr = error.message;
+              }else if(error.field == "lon"){
+                this.lonErr = error.message;
+              }else if(error.field == "beltColor"){
+                console.log(error.message);
+              }else{
+                alert("NOOOOO MI PAGE");
+              }
+            });
+          }
         }
-      }
-    });
+      });
+    }else{
+      this.gymService.createGym(toSave).subscribe({
+        next: data=> {
+          window.location.href = `${environment.localHost}gym`
+        }, error: err => {
+          if(err.status == 400){
+            let badReq = err.error;
+            console.log(badReq);
+            let errors = badReq.body.fields_errors;
+            errors.forEach((error: { field: string; message: string; }) => {
+              if(error.field == "name"){
+                this.gymNameErr = error.message;
+              }else if(error.field == "city"){
+                this.gymCityErr = error.message;
+              }else if(error.field == "lat"){
+                this.latErr = error.message;
+              }else if(error.field == "lon"){
+                this.lonErr = error.message;
+              }else if(error.field == "beltColor"){
+                console.log(error.message);
+              }else{
+                alert("NOOOOO MI PAGE");
+              }
+            });
+          }
+        }
+      });
+    }
   }
 
   deleteGym(gymId:String){
@@ -94,6 +129,22 @@ export class GymPageComponent implements OnInit {
         console.log(err.error.message);
       }
     });
+  }
+
+  openEditModal(gym: Gym,content: TemplateRef<any>){
+    this.gymName = gym.name;
+    this.lon = gym.altitude;
+    this.lat = gym.latitude;
+    this.isEdit = true;
+    this.gymId = gym.id;
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then(
+			(result) => {
+				console.log( `Closed with: ${result}`);
+			},
+			(reason) => {
+				console.log(`${reason}`);
+			},
+		);
   }
 
 }

@@ -24,10 +24,22 @@ export class GymService {
       "lon": newGym.lon,
       "beltColor" : newGym.beltColor
   }
-  )
+  );
   }
 
   deleteGym(gymId:String):Observable<any>{
-    return this.http.delete(`${environment.apiBaseUrl}gym/${gymId}`)
+    return this.http.delete(`${environment.apiBaseUrl}gym/${gymId}`);
+  }
+
+  editGym(gymId:String, newGym: CreateGymRequest):Observable<any>{
+    return this.http.put(`${environment.apiBaseUrl}gym/${gymId}`, 
+      {
+        "name": newGym.name,
+        "city": newGym.city,
+        "lat" : newGym.lat,
+        "lon": newGym.lon,
+        "beltColor" : newGym.beltColor
+    }
+  );
   }
 }

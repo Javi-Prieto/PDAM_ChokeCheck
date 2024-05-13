@@ -125,6 +125,40 @@ public class GymController {
     }
 
     @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "The Gym was Edited Correctly", content = {
+                    @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = Gym.class)),
+                            examples = {@ExampleObject(
+                                    value = """
+                                                {
+                                                    "id": "04a1f811-c826-48aa-a601-7f72bd614303",
+                                                    "type": "TRAINING",
+                                                    "authorName": "javi.prieto",
+                                                    "authorBelt": "RED",
+                                                    "likes": 1,
+                                                    "avgRate": 9.0,
+                                                    "title": "My First Ever Training",
+                                                    "content": "3x3min Jump Ropes,4x3min Pads,5x3min Sparring"
+                                                }
+                                            """
+                            )}
+                    )}),
+            @ApiResponse(responseCode = "400",
+                    description = "The body is not correct",
+                    content = @Content),
+            @ApiResponse(responseCode = "401",
+                    description = "Not logged user",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = GymResponse.class))))
+    })
+    @Operation(summary = "Edit Gym", description = "Edit Gym")
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public GymResponse editGym(@RequestBody @Valid GymRequest gymRequest, @PathVariable UUID id){
+        return service.editGym(gymRequest, id);
+    }
+
+    @ApiResponses(value = {
             @ApiResponse(responseCode = "204",
                     description = "The Gym and it's applies deleted correctly",
                     content = @Content
