@@ -30,6 +30,9 @@
                 <td>{{ tournament.minWeight }} - {{tournament.maxWeight}}</td>
                 <td>{{ tournament.city }}</td>
                 <td>
+					<button class="btn" (click)="openEditModal(tournament, createGymModal)">
+						<i class="fa-regular fa-pen-to-square" style="color:yellow;"></i>
+					</button>
 					<button class="btn" (click)="deleteTournament(tournament.id)">
 						<i class="fa-regular fa-trash-can" style="color:red;"></i>
 					</button>

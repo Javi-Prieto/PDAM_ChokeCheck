@@ -17,6 +17,7 @@ import salesianos.triana.dam.ChokeCheck.tournament.dto.CreateTournament;
 import salesianos.triana.dam.ChokeCheck.tournament.dto.TournamentDto;
 import salesianos.triana.dam.ChokeCheck.tournament.model.Tournament;
 import salesianos.triana.dam.ChokeCheck.tournament.repository.TournamentRepository;
+import salesianos.triana.dam.ChokeCheck.user.dto.CreateUserRequest;
 import salesianos.triana.dam.ChokeCheck.user.model.BeltColor;
 import salesianos.triana.dam.ChokeCheck.user.model.User;
 import salesianos.triana.dam.ChokeCheck.user.repository.UserRepository;
@@ -59,6 +60,37 @@ public class TournamentService {
         gymRepository.save(author.get());
         repo.save(newTournament);
         return TournamentDto.ofTable(newTournament);
+    }
+
+    public TournamentDto editTournament(CreateTournament editTournament, UUID id){
+        Optional< Tournament> selected = repo.findById(id);
+        if(selected.isEmpty()) throw new NotFoundException("Tournament");
+        Tournament toEdit = selected.get();
+        Optional<Gym> author = gymRepository.findById(editTournament.authorGymId());
+        if(author.isEmpty()) throw new NotFoundException("Gym");
+        Gym authorGym = author.get();
+        if(!toEdit.getAuthor().getId().equals(authorGym.getId())){
+            Gym toRemoveTournament = toEdit.getAuthor();
+            toRemoveTournament.removeTournament(toEdit);
+            gymRepository.save(toRemoveTournament);
+            toEdit.deleteAuthor();
+            toEdit.addAuthor(authorGym);
+            System.out.println("--------------");
+            System.out.println("True");
+            System.out.println("--------------");
+        }
+        toEdit.setTitle(editTournament.title());
+        toEdit.setBeginDate(editTournament.beginDate());
+        toEdit.setHigherBelt(CreateUserRequest.getBeltColor(editTournament.higherBelt()));
+        toEdit.setDescription(editTournament.description());
+        toEdit.setParticipants(editTournament.participants());
+        toEdit.setPrize(editTournament.prize());
+        toEdit.setCost(editTournament.cost());
+        toEdit.setMinWeight(editTournament.minWeight());
+        toEdit.setMaxWeight(editTournament.maxWeight());
+        toEdit.setSex(editTournament.sex());
+        repo.save(toEdit);
+        return TournamentDto.ofTable(toEdit);
     }
 
     public TournamentDto addApply(UUID uuid, User user) throws NotBeltLevelException {

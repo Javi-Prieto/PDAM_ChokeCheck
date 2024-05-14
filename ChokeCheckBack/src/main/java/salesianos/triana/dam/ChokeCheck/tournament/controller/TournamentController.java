@@ -276,6 +276,67 @@ public class TournamentController {
         return ResponseEntity.status(201).body(service.createTournament(createTournament));
    }
 
+   @ApiResponses(
+                value = {
+            @ApiResponse(responseCode = "201", description = "Tournament edited correctly", content = {
+                    @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = Tournament.class)),
+                            examples = {@ExampleObject(
+                                    value = """
+                                                {
+                                                    "content": [
+                                                        {
+                                                                    "title": "Sparring Time",
+                                                                    "date": "2024-12-01 17:30:15",
+                                                                    "participants": 8,
+                                                                    "applied": 0,
+                                                                    "higherBelt": "RED_WHITE",
+                                                                    "prize": 0.0,
+                                                                    "author": "Sutemi MMA"
+                                                        }
+                                                    ],
+                                                    "size": 10,
+                                                    "totalElements": 1,
+                                                    "pageNumber": 0,
+                                                    "first": true,
+                                                    "last": true
+                                                }
+                                            """
+                            )}
+                    )}),
+            @ApiResponse(responseCode = "401",
+                    description = "Not logged user",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = Tournament.class)),
+                            examples = {@ExampleObject(
+                                    """
+                                        {
+                                            "error": "You can not do this"
+                                        }
+                                    """
+                            )
+                            })),
+            @ApiResponse(responseCode = "400",
+                    description = "Invalid data",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = Tournament.class)),
+                            examples = {@ExampleObject(
+                                    """
+                                        {
+                                            "error": "Not valid data"
+                                        }
+                                    """
+                            )
+                            }))
+        }
+    )
+    @Operation(summary = "Edit tournament", description = "Edit a Tournament")
+    @JsonView(TournamentViews.TournamentList.class)
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editTournament(@RequestBody @Valid CreateTournament editTournament, @PathVariable UUID id){
+        return ResponseEntity.status(201).body(service.editTournament(editTournament, id));
+    }
+
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "The Rate Created Correctly", content = {
