@@ -36,4 +36,26 @@ export class TournamentService {
   deleteTournament(tournamentId:String):Observable<any>{
     return this.http.delete(`${environment.apiBaseUrl}tournament/${tournamentId}`);
   }
+  editTournament(tournamentId:String, editTournament: CreateTournamentRequest):Observable<any>{
+    console.log(editTournament);
+    if(!editTournament.beginDate.includes('T')){
+      editTournament.beginDate = editTournament.beginDate.replace(' ', 'T')
+    }
+    console.log(editTournament);
+    return this.http.put(`${environment.apiBaseUrl}tournament/${tournamentId}`, 
+    {
+      "title": editTournament.title,
+      "beginDate": editTournament.beginDate,
+      "higherBelt": editTournament.higherBelt,
+      "description": editTournament.description,
+      "participants": editTournament.participants,
+      "prize": editTournament.prize,
+      "cost": editTournament.cost,
+      "minWeight": editTournament.minWeight,
+      "maxWeight": editTournament.maxWeight,
+      "sex": editTournament.sex,
+      "authorGymId": editTournament.authorGymId
+  }
+  );
+  }
 }

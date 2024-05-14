@@ -13,7 +13,7 @@ public record CreateTournament(
         @NotEmpty(message = "The title could not be empty")
          String title,
         @NotNull(message = "The date could not be empty")
-        @FutureOrPresent
+        @FutureOrPresent(message = "The date must be bigger than today")
         LocalDateTime beginDate,
          @NotEmpty(message = "The higher belt could not be empty")
          String higherBelt,
