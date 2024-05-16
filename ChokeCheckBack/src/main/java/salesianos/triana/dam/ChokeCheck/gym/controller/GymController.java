@@ -15,11 +15,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import salesianos.triana.dam.ChokeCheck.assets.MyPage;
+import salesianos.triana.dam.ChokeCheck.gym.dto.GymPercentageTournamentResponse;
 import salesianos.triana.dam.ChokeCheck.gym.dto.GymRequest;
 import salesianos.triana.dam.ChokeCheck.gym.dto.GymResponse;
 import salesianos.triana.dam.ChokeCheck.gym.model.Gym;
 import salesianos.triana.dam.ChokeCheck.gym.service.GymService;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -174,4 +176,67 @@ public class GymController {
         service.deleteGym(id);
         return ResponseEntity.noContent().build();
     }
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Obtains all the Gym paged", content = {
+                    @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = GymResponse.class)),
+                            examples = {@ExampleObject(
+                                    value = """
+                                                {
+                                                    "content": [
+                                                        {
+                                                            "id": "83b8640e-b7d7-4f4b-8224-8f21f38b776a",
+                                                            "name": "Gracie",
+                                                            "avgBelt": "RED_WHITE",
+                                                            "latitude": -5.999276495573956,
+                                                            "altitude": 37.37821574699546,
+                                                            "numberTournaments": 2
+                                                        },
+                                                    ],
+                                                    "size": 2,
+                                                    "totalElements": 2,
+                                                    "pageNumber": 0,
+                                                    "first": true,
+                                                    "last": true
+                                                }
+                                            """
+                            )}
+                    )}),
+            @ApiResponse(responseCode = "401",
+                    description = "Not logged user",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = GymResponse.class)),
+                            examples = {@ExampleObject(
+                                    """
+                                        {
+                                            "error": "You can not do this"
+                                        }
+                                    """
+                            )
+                            })),
+            @ApiResponse(responseCode = "403",
+                    description = "Acces Denied",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = GymResponse.class)),
+                            examples = {@ExampleObject(
+                                    """
+                                    {
+                                        "status": "FORBIDDEN",
+                                        "message": "Access Denied",
+                                        "path": "/gym",
+                                        "dateTime": "19/03/2024 14:22:07"
+                                    }
+                                    """
+                            )
+                            }))
+    })
+    @Operation(summary = "Find all the Gyms", description = "Returns a paged list of all the Gym in the api")
+    @GetMapping("/percentage")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public List<GymPercentageTournamentResponse> getPercentageOfTournamentPublished(){
+        return service.getPercentageGym();
+    }
+
+
 }

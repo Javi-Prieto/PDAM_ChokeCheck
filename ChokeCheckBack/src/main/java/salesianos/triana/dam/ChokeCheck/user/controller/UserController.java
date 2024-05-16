@@ -28,6 +28,7 @@ import salesianos.triana.dam.ChokeCheck.user.dto.*;
 import salesianos.triana.dam.ChokeCheck.user.model.User;
 import salesianos.triana.dam.ChokeCheck.user.service.UserService;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -359,6 +360,70 @@ public class UserController {
     public ResponseEntity<?> deleteUser(@PathVariable UUID id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Obtain correctly the best 3 publishers", content = {
+                    @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = User.class)),
+                            examples = {@ExampleObject(
+                                    value = """
+                                                [
+                                                    {
+                                                        "name": "paco",
+                                                        "surname": "perez",
+                                                        "username": "paquito_er_chulo",
+                                                        "belt": "blue",
+                                                        "age": 19,
+                                                        "weight": 19,
+                                                        "sex": 0,
+                                                        "posts": [
+                                                            {
+                                                                "id": "399e5bd9-933e-4a7f-bdf9-4ca51fd6bcf6",
+                                                                "type": "TRAINING",
+                                                                "authorName": "paquito_er_chulo",
+                                                                "authorBelt": "BLUE",
+                                                                "likes": 95,
+                                                                "avgRate": 1.0,
+                                                                "title": "My First Ever Training",
+                                                                "content": "3x3min|Jump Ropes,4x3min|Pads,5x3min|Sparring"
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            """
+                            )}
+                    )}),
+            @ApiResponse(responseCode = "401",
+                    description = "Not logged user",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = User.class)),
+                            examples = {@ExampleObject(
+                                    """
+                                        {
+                                            "error": "You can not do this"
+                                        }
+                                    """
+                            )
+                            })),
+            @ApiResponse(responseCode = "404",
+                    description = "Not Found",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = User.class)),
+                            examples = {@ExampleObject(
+                                    """
+                                        {
+                                            "error": "Not Found the User or the list you are looking for"
+                                        }
+                                    """
+                            )
+                            }))
+    })
+    @Operation(summary = "Find the best 3 publishers", description = "Find the 3 users who publish more post")
+    @GetMapping("/user/best_publisher")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public List<UserBestPublisher> getThreeBestPublishers(){
+        return userService.getThreeBestPublisher();
     }
 
 }

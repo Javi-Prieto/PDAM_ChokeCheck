@@ -6,10 +6,12 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.UuidGenerator;
 import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
 import salesianos.triana.dam.ChokeCheck.like.model.Like;
 import salesianos.triana.dam.ChokeCheck.rate.model.Rate;
 import salesianos.triana.dam.ChokeCheck.user.model.User;
 
+import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -55,6 +57,9 @@ public class Post {
 
     private String title;
 
+    @CreatedDate
+    @Builder.Default
+    private LocalDate createdAt = LocalDate.now();
 
     private String content;
 

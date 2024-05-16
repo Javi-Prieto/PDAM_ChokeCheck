@@ -6,6 +6,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.UuidGenerator;
 import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
 import salesianos.triana.dam.ChokeCheck.apply.model.Apply;
 import salesianos.triana.dam.ChokeCheck.gym.model.Gym;
 import salesianos.triana.dam.ChokeCheck.user.model.BeltColor;
@@ -49,6 +50,10 @@ public class Tournament {
     private int minWeight;
     private int maxWeight;
     private byte sex;
+
+    @CreatedDate
+    @Builder.Default
+    private LocalDate createdAt = LocalDate.now();
 
     @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.MERGE)
     @ElementCollection(fetch = FetchType.LAZY)

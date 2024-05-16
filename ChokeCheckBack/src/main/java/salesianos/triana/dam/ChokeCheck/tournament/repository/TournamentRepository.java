@@ -32,6 +32,12 @@ public interface TournamentRepository extends JpaRepository<Tournament, UUID> {
     List<Tournament> getAllIds(List<UUID> ids);
 
     @Query("""
+            SELECT t FROM Tournament t 
+            WHERE MONTH(t.createdAt) = :month
+            """)
+    List<Tournament> getAllByCreatedAtMonth(int month);
+
+    @Query("""
             select t from Tournament t
             left join fetch t.applies as a
             where t.id = :id

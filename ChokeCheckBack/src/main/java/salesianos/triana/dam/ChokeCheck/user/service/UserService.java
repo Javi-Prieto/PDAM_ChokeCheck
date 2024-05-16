@@ -21,10 +21,9 @@ import salesianos.triana.dam.ChokeCheck.user.model.User;
 import salesianos.triana.dam.ChokeCheck.user.model.UserRole;
 import salesianos.triana.dam.ChokeCheck.user.repository.UserRepository;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -152,5 +151,40 @@ public class UserService {
         });
         repo.delete(selected.get());
 
+    }
+
+    public List<UserBestPublisher> getThreeBestPublisher(){
+        User [] result = new User[3];
+        List<Post> allPostMonth = postRepository.getAllByCreatedAtMonth(LocalDate.now().getMonthValue());
+        List<User> allUser = repo.findAll();
+        int first = 0, second =0 , third =0;
+        int finalFirst, finalSecond, finalThird;
+        for(User user: allUser){
+            int actualNumber = allPostMonth.stream().filter(p -> p.getAuthor().getId().equals(user.getId())).toList().size();
+            if(actualNumber > first){
+                second = first;
+                result[1] = result[0];
+                first = actualNumber;
+                result[0] = user;
+            }else if(actualNumber > second){
+                third = second;
+                result[2] = result[1];
+                second = actualNumber;
+                result[1] = user;
+            }else if(actualNumber > third){
+                third = actualNumber;
+                result[2] = user;
+            }
+        }
+        finalFirst = first;
+        finalSecond = second;
+        finalThird = third;
+        return Arrays.stream(result).map(u -> {
+            int index = Arrays.asList(result).indexOf(u);
+            if(index == 0) return UserBestPublisher.of(u, finalFirst);
+            if(index == 1) return UserBestPublisher.of(u, finalSecond);
+            if(index == 2) return UserBestPublisher.of(u, finalThird);
+            return UserBestPublisher.builder().build();
+        }).toList();
     }
 }

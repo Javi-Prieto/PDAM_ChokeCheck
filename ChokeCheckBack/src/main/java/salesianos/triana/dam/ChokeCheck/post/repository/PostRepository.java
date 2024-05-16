@@ -10,6 +10,7 @@ import salesianos.triana.dam.ChokeCheck.apply.model.Apply;
 import salesianos.triana.dam.ChokeCheck.like.model.Like;
 import salesianos.triana.dam.ChokeCheck.post.model.Post;
 import salesianos.triana.dam.ChokeCheck.rate.model.Rate;
+import salesianos.triana.dam.ChokeCheck.tournament.model.Tournament;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +28,12 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
     List<Post> findAllPaged(List<UUID> ids);
 
     List<Post> findAllByAuthorUsername(String username);
+
+    @Query("""
+            SELECT p FROM Post p 
+            WHERE MONTH(p.createdAt) = :month
+            """)
+    List<Post> getAllByCreatedAtMonth(int month);
 
     @Query("""
             select p from Post p
