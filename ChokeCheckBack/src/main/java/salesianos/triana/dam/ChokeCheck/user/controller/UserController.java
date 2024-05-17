@@ -370,25 +370,25 @@ public class UserController {
                                     value = """
                                                 [
                                                     {
+                                                        "name": "javi",
+                                                        "surname": "prieto",
+                                                        "username": "javi.prieto",
+                                                        "belt": "red",
+                                                        "postPublished": 3
+                                                    },
+                                                    {
+                                                        "name": "orlo",
+                                                        "surname": "german",
+                                                        "username": "orlito_er_bjj",
+                                                        "belt": "blue",
+                                                        "postPublished": 2
+                                                    },
+                                                    {
                                                         "name": "paco",
                                                         "surname": "perez",
                                                         "username": "paquito_er_chulo",
                                                         "belt": "blue",
-                                                        "age": 19,
-                                                        "weight": 19,
-                                                        "sex": 0,
-                                                        "posts": [
-                                                            {
-                                                                "id": "399e5bd9-933e-4a7f-bdf9-4ca51fd6bcf6",
-                                                                "type": "TRAINING",
-                                                                "authorName": "paquito_er_chulo",
-                                                                "authorBelt": "BLUE",
-                                                                "likes": 95,
-                                                                "avgRate": 1.0,
-                                                                "title": "My First Ever Training",
-                                                                "content": "3x3min|Jump Ropes,4x3min|Pads,5x3min|Sparring"
-                                                            }
-                                                        ]
+                                                        "postPublished": 1
                                                     }
                                                 ]
                                             """
@@ -424,6 +424,87 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<UserBestPublisher> getThreeBestPublishers(){
         return userService.getThreeBestPublisher();
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Obtain correctly the 5 users who applied more", content = {
+                    @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = User.class)),
+                            examples = {@ExampleObject(
+                                    value = """
+                                                {
+                                                     "totalApplies": 3,
+                                                     "userBestPublisherList": [
+                                                         {
+                                                             "name": "paco",
+                                                             "surname": "perez",
+                                                             "username": "paquito_er_chulo",
+                                                             "belt": "blue",
+                                                             "postPublished": 2
+                                                         },
+                                                         {
+                                                             "name": "javi",
+                                                             "surname": "prieto",
+                                                             "username": "javi.prieto",
+                                                             "belt": "red",
+                                                             "postPublished": 1
+                                                         },
+                                                         {
+                                                             "name": "charles",
+                                                             "surname": "oliveira",
+                                                             "username": "charles_world",
+                                                             "belt": "blue",
+                                                             "postPublished": 0
+                                                         },
+                                                         {
+                                                             "name": "joe",
+                                                             "surname": "regan",
+                                                             "username": "joe_bjj",
+                                                             "belt": "blue",
+                                                             "postPublished": 0
+                                                         },
+                                                         {
+                                                             "name": "illo",
+                                                             "surname": "juan",
+                                                             "username": "illojuan",
+                                                             "belt": "blue",
+                                                             "postPublished": 0
+                                                         }
+                                                     ]
+                                                 }
+                                            """
+                            )}
+                    )}),
+            @ApiResponse(responseCode = "401",
+                    description = "Not logged user",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = User.class)),
+                            examples = {@ExampleObject(
+                                    """
+                                        {
+                                            "error": "You can not do this"
+                                        }
+                                    """
+                            )
+                            })),
+            @ApiResponse(responseCode = "404",
+                    description = "Not Found",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = User.class)),
+                            examples = {@ExampleObject(
+                                    """
+                                        {
+                                            "error": "Not Found the User or the list you are looking for"
+                                        }
+                                    """
+                            )
+                            }))
+    })
+    @Operation(summary = "Find the 5 users who applied to more tournaments", description = "Find the 5 users who applied to more tournaments")
+    @GetMapping("/user/best_appliers")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public UserMostAppliers getFiveBestAppliers(){
+        return userService.getFiveBestAppliers();
     }
 
 }

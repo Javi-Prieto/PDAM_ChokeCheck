@@ -157,34 +157,48 @@ public class UserService {
         User [] result = new User[3];
         List<Post> allPostMonth = postRepository.getAllByCreatedAtMonth(LocalDate.now().getMonthValue());
         List<User> allUser = repo.findAll();
-        int first = 0, second =0 , third =0;
-        int finalFirst, finalSecond, finalThird;
-        for(User user: allUser){
-            int actualNumber = allPostMonth.stream().filter(p -> p.getAuthor().getId().equals(user.getId())).toList().size();
-            if(actualNumber > first){
-                second = first;
-                result[1] = result[0];
-                first = actualNumber;
-                result[0] = user;
-            }else if(actualNumber > second){
-                third = second;
-                result[2] = result[1];
-                second = actualNumber;
-                result[1] = user;
-            }else if(actualNumber > third){
-                third = actualNumber;
-                result[2] = user;
-            }
+        Map<User, Integer> userAppliesMap = new HashMap<>();
+        List<User> sortedUsers = new ArrayList<>();
+        for (User user : allUser) {
+            userAppliesMap.put(user, (int) allPostMonth.stream()
+                    .filter(a -> a.getAuthor().getId().equals(user.getId()))
+                    .count());
         }
-        finalFirst = first;
-        finalSecond = second;
-        finalThird = third;
-        return Arrays.stream(result).map(u -> {
-            int index = Arrays.asList(result).indexOf(u);
-            if(index == 0) return UserBestPublisher.of(u, finalFirst);
-            if(index == 1) return UserBestPublisher.of(u, finalSecond);
-            if(index == 2) return UserBestPublisher.of(u, finalThird);
-            return UserBestPublisher.builder().build();
-        }).toList();
+        sortedUsers = userAppliesMap.entrySet().stream()
+                .sorted(Map.Entry.<User, Integer>comparingByValue().reversed())
+                .limit(3)
+                .map(Map.Entry::getKey)
+                .toList();
+
+        return sortedUsers.stream().map(u -> UserBestPublisher.of(u, userAppliesMap.get(u))).toList();
+    }
+
+    public UserMostAppliers getFiveBestAppliers() {
+        List<User> allUser = repo.findAll();
+        List<Apply> allApplyMonth = tournamentRepository.getAllApplyByCreatedAtMonth(LocalDate.now().getMonthValue());
+        List<User> sortedUsers = new ArrayList<>();
+        Map<User, Integer> userAppliesMap = new HashMap<>();
+        List<UserBestPublisher> finish = new ArrayList<>();
+        for (User user : allUser) {
+            int actualNumber = (int) allApplyMonth.stream()
+                    .filter(a -> a.getAuthor().getId().equals(user.getId()))
+                    .count();
+
+            userAppliesMap.put(user, actualNumber);
+        }
+
+        sortedUsers = userAppliesMap.entrySet().stream()
+                .sorted(Map.Entry.<User, Integer>comparingByValue().reversed())
+                .limit(5)
+                .map(Map.Entry::getKey)
+                .toList();
+
+
+        for (User user : sortedUsers) {
+            UserBestPublisher userResult = UserBestPublisher.of(user, userAppliesMap.get(user));
+            finish.add(userResult);
+        }
+
+        return UserMostAppliers.of(finish, allApplyMonth.size());
     }
 }

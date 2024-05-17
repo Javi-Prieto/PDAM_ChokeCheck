@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 import salesianos.triana.dam.ChokeCheck.apply.model.Apply;
 import salesianos.triana.dam.ChokeCheck.apply.model.ApplyPk;
+import salesianos.triana.dam.ChokeCheck.post.model.Post;
 import salesianos.triana.dam.ChokeCheck.tournament.model.Tournament;
 
 import java.util.List;
@@ -57,4 +58,10 @@ public interface TournamentRepository extends JpaRepository<Tournament, UUID> {
             where a.tournament.id = :id
             """)
     List<Apply> findAllApplies(UUID id);
+
+    @Query("""
+            SELECT a FROM Apply a 
+            WHERE MONTH(a.createdAt) = :month
+            """)
+    List<Apply> getAllApplyByCreatedAtMonth(int month);
 }

@@ -7,6 +7,14 @@ insert into user_roles ( roles, user_id ) values ( 0, 'c2f86ad9-8e2c-448d-92e6-3
 insert into users (age  , belt_color   , height  , sex  , weight  , id, avatar , belt_photo , email , name , password , surname , username ) values (19, 1, 178, 0, 76, '0fa762a2-05bb-44e7-8af4-0ec72107289a', 'hola', 'hola', 'orlo@gmail.com', 'orlo', '{bcrypt}$2a$12$RtYIPopxzo6sCUrg3xOT7eCFdhxjFV2m0vMDeIPTHCwlR.AtjC4xa', 'german', 'orlito_er_bjj');
 insert into user_roles ( roles, user_id ) values ( 0, '0fa762a2-05bb-44e7-8af4-0ec72107289a');
 
+insert into users (age  , belt_color   , height  , sex  , weight  , id, avatar , belt_photo , email , name , password , surname , username ) values (19, 1, 178, 0, 76, '457321e6-2208-44fc-97b0-924ad40a584b', 'hola', 'hola', 'joeregan@gmail.com', 'joe', '{bcrypt}$2a$12$RtYIPopxzo6sCUrg3xOT7eCFdhxjFV2m0vMDeIPTHCwlR.AtjC4xa', 'regan', 'joe_bjj');
+insert into user_roles ( roles, user_id ) values ( 0, '0fa762a2-05bb-44e7-8af4-0ec72107289a');
+
+insert into users (age  , belt_color   , height  , sex  , weight  , id, avatar , belt_photo , email , name , password , surname , username ) values (19, 1, 178, 0, 76, 'd6c884c5-0c6c-41a3-8233-7daccc3998a1', 'hola', 'hola', 'charles@gmail.com', 'charles', '{bcrypt}$2a$12$RtYIPopxzo6sCUrg3xOT7eCFdhxjFV2m0vMDeIPTHCwlR.AtjC4xa', 'oliveira', 'charles_world');
+insert into user_roles ( roles, user_id ) values ( 0, '0fa762a2-05bb-44e7-8af4-0ec72107289a');
+
+insert into users (age  , belt_color   , height  , sex  , weight  , id, avatar , belt_photo , email , name , password , surname , username ) values (19, 1, 178, 0, 76, '68bbb6fe-f4d2-49ab-8c88-3beaf6e854d2', 'hola', 'hola', 'illo@gmail.com', 'illo', '{bcrypt}$2a$12$RtYIPopxzo6sCUrg3xOT7eCFdhxjFV2m0vMDeIPTHCwlR.AtjC4xa', 'juan', 'illojuan');
+insert into user_roles ( roles, user_id ) values ( 0, '0fa762a2-05bb-44e7-8af4-0ec72107289a');
 
 insert into post(created_at, type, author_id, id , content , title ) values (CURRENT_DATE, 0, '0fa762a2-05bb-44e7-8af4-0ec72107289a', '8b4eb69f-bda5-4e64-b751-291fac989149', '3x3min|Jump Ropes,4x3min|Pads,5x3min|Sparring', 'My First Ever Training');
 
