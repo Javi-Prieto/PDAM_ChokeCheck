@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import salesianos.triana.dam.ChokeCheck.assets.MyPage;
 import salesianos.triana.dam.ChokeCheck.error.exception.NotFoundException;
+import salesianos.triana.dam.ChokeCheck.gym.dto.GymPercentageResponse;
 import salesianos.triana.dam.ChokeCheck.gym.dto.GymPercentageTournamentResponse;
 import salesianos.triana.dam.ChokeCheck.gym.dto.GymRequest;
 import salesianos.triana.dam.ChokeCheck.gym.dto.GymResponse;
@@ -33,17 +34,14 @@ public class GymService {
         return MyPage.of(toReturn, result.stream().map(GymResponse::of).toList());
     }
 
-    public List<GymPercentageTournamentResponse> getPercentageGym(){
+    public GymPercentageResponse getPercentageGym(){
         List<GymPercentageTournamentResponse> result = new ArrayList<>();
         int allTournament = tournamentRepository.getAllByCreatedAtMonth(LocalDate.now().getMonthValue()).size();
         repo.findAll().forEach(gym -> {
             int numberOfTournaments = gym.getTournaments().stream().filter(t -> t.getCreatedAt().getMonthValue() == LocalDate.now().getMonthValue()).toList().size();
-
-            int percentage = Math.round( ((float) numberOfTournaments / allTournament) * 100);
-            System.out.println(percentage);
-            result.add(GymPercentageTournamentResponse.of(gym.getName(), percentage));
+            result.add(GymPercentageTournamentResponse.of(gym.getName(), numberOfTournaments));
         });
-        return result;
+        return GymPercentageResponse.of(allTournament, result);
     }
     public GymResponse createGym(GymRequest gymRequest){
         Gym selected = GymRequest.from(gymRequest);

@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { CreateUserRequest } from '../models/request/create-user-request.interface';
 import { EditUserRequest } from '../models/request/edit-user-request.interface';
 import { UserBestAppliers } from '../models/response/user-best-appliers.interface';
+import { UserBestPoster } from '../models/response/user-best-poster.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -54,6 +55,10 @@ export class UserService {
 
   get5bestAppliers():Observable<UserBestAppliers>{
     return this.http.get<UserBestAppliers>(`${environment.apiBaseUrl}user/best_appliers`);
+  }
+
+  getBestPoster():Observable<UserBestPoster[]>{
+    return this.http.get<UserBestPoster[]>(`${environment.apiBaseUrl}user/best_publisher`);
   }
 }
 

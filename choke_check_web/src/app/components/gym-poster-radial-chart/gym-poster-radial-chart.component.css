@@ -1,0 +1,9 @@
+#baseBg{
+    background-image: linear-gradient(white, lightblue, lightpink, white);
+    width: 600px;
+    height: 450px;
+}
+canvas{
+    width: 60% !important;
+    height: 70% !important;
+}

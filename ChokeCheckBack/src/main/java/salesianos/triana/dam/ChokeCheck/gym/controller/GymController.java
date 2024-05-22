@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import salesianos.triana.dam.ChokeCheck.assets.MyPage;
+import salesianos.triana.dam.ChokeCheck.gym.dto.GymPercentageResponse;
 import salesianos.triana.dam.ChokeCheck.gym.dto.GymPercentageTournamentResponse;
 import salesianos.triana.dam.ChokeCheck.gym.dto.GymRequest;
 import salesianos.triana.dam.ChokeCheck.gym.dto.GymResponse;
@@ -184,21 +185,17 @@ public class GymController {
                             examples = {@ExampleObject(
                                     value = """
                                                 {
-                                                    "content": [
+                                                    "totalTournaments": 4,
+                                                    "gyms": [
                                                         {
-                                                            "id": "83b8640e-b7d7-4f4b-8224-8f21f38b776a",
-                                                            "name": "Gracie",
-                                                            "avgBelt": "RED_WHITE",
-                                                            "latitude": -5.999276495573956,
-                                                            "altitude": 37.37821574699546,
-                                                            "numberTournaments": 2
+                                                            "gymName": "Sutemi MMA",
+                                                            "percentage": 50
                                                         },
-                                                    ],
-                                                    "size": 2,
-                                                    "totalElements": 2,
-                                                    "pageNumber": 0,
-                                                    "first": true,
-                                                    "last": true
+                                                        {
+                                                            "gymName": "Gracie",
+                                                            "percentage": 50
+                                                        }
+                                                    ]
                                                 }
                                             """
                             )}
@@ -234,7 +231,7 @@ public class GymController {
     @Operation(summary = "Find all the Gyms", description = "Returns a paged list of all the Gym in the api")
     @GetMapping("/percentage")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public List<GymPercentageTournamentResponse> getPercentageOfTournamentPublished(){
+    public GymPercentageResponse getPercentageOfTournamentPublished(){
         return service.getPercentageGym();
     }
 

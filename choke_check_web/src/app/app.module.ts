@@ -19,6 +19,8 @@ import { LoggerInterceptor } from './logger.interceptor';
 import { RemoveWrapperInterceptor } from './remove-wrapper-interceptor';
 import { BestAppliersChartComponent } from './components/best-appliers-chart/best-appliers-chart.component';
 import { BaseChartDirective, provideCharts, withDefaultRegisterables } from 'ng2-charts';
+import { GymPosterRadialChartComponent } from './components/gym-poster-radial-chart/gym-poster-radial-chart.component';
+import { UserPosterListComponent } from './components/user-poster-list/user-poster-list.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,9 @@ import { BaseChartDirective, provideCharts, withDefaultRegisterables } from 'ng2
     LoginPageComponent,
     LoggedSectionComponent,
     NotFoundPageComponent,
-    BestAppliersChartComponent
+    BestAppliersChartComponent,
+    GymPosterRadialChartComponent,
+    UserPosterListComponent
   ],
   imports: [
     BrowserModule,

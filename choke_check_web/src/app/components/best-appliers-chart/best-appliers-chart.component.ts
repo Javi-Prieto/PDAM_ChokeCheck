@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { ChartConfiguration, ChartData, ChartEvent } from 'chart.js';
-import { BaseChartDirective } from 'ng2-charts';
 import { UserBestAppliers } from '../../models/response/user-best-appliers.interface';
 
 @Component({
@@ -41,11 +40,9 @@ export class BestAppliersChartComponent implements OnInit{
           this.barChartData = {
             labels: this.labels,
             datasets: [
-              { data: this.allUserApplies,},
+              { data: this.allUserApplies, label: 'Number of Tournaments'},
             ],
           };
-          console.log(this.allUserApplies);
-          console.log(this.info);
         }
       },error: err =>{
         console.log(err.toString());

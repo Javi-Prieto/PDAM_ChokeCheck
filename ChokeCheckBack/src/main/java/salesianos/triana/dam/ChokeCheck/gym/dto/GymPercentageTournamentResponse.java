@@ -6,13 +6,13 @@ import lombok.Builder;
 public record GymPercentageTournamentResponse
         (
                 String gymName,
-                int percentage
+                int numberOfTournaments
         ) {
 
-    public static GymPercentageTournamentResponse of(String gymName, int percentage){
+    public static GymPercentageTournamentResponse of(String gymName, int numberOfTournaments){
         return GymPercentageTournamentResponse.builder()
                 .gymName(gymName)
-                .percentage(percentage)
+                .numberOfTournaments(numberOfTournaments)
                 .build();
     }
 

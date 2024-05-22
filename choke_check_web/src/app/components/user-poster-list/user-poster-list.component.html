@@ -1,0 +1,12 @@
+<div class="rounded-2 shadow m-auto" id="baseBg">
+    <h3 class="fs-2 text-center fw-bold pt-3">Best Publishers</h3>
+    @for (user of users; track $index) {
+        <div class="w-75 flex-column d-flex m-auto">
+            <p class="fs-5 fw-bold mb-0">{{user.username}}</p>
+            <p class="fs-7 text-secondary">{{user.name}} {{user.surname}} | No. Post:{{user.postPublished}}</p>
+            <ngb-progressbar height="5px" [type]="frombBeltToColor(user.belt)" [value]="fromBeltToInt(user.belt)"></ngb-progressbar>
+            <p class="fs-7 text-secondary">Belt Level: {{user.belt}}</p>
+        </div>
+    }
+</div>
+ 

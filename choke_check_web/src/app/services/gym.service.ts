@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Gym, GymListResponse } from '../models/response/gym-list-response.interface';
 import { environment } from '../../environments/environment.development';
 import { CreateGymRequest } from '../models/request/create-gym-request.interface';
+import { GymPercentageTournamentResponse } from '../models/response/gym-percentage-tournaments-response.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -41,5 +42,9 @@ export class GymService {
         "beltColor" : newGym.beltColor
     }
   );
+  }
+
+  getGymsPercentageTournament():Observable<GymPercentageTournamentResponse>{
+    return this.http.get<GymPercentageTournamentResponse>(`${environment.apiBaseUrl}gym/percentage`);
   }
 }
