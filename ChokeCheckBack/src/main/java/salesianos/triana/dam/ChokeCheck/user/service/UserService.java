@@ -21,10 +21,9 @@ import salesianos.triana.dam.ChokeCheck.user.model.User;
 import salesianos.triana.dam.ChokeCheck.user.model.UserRole;
 import salesianos.triana.dam.ChokeCheck.user.repository.UserRepository;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -152,5 +151,54 @@ public class UserService {
         });
         repo.delete(selected.get());
 
+    }
+
+    public List<UserBestPublisher> getThreeBestPublisher(){
+        User [] result = new User[3];
+        List<Post> allPostMonth = postRepository.getAllByCreatedAtMonth(LocalDate.now().getMonthValue());
+        List<User> allUser = repo.findAll();
+        Map<User, Integer> userAppliesMap = new HashMap<>();
+        List<User> sortedUsers = new ArrayList<>();
+        for (User user : allUser) {
+            userAppliesMap.put(user, (int) allPostMonth.stream()
+                    .filter(a -> a.getAuthor().getId().equals(user.getId()))
+                    .count());
+        }
+        sortedUsers = userAppliesMap.entrySet().stream()
+                .sorted(Map.Entry.<User, Integer>comparingByValue().reversed())
+                .limit(3)
+                .map(Map.Entry::getKey)
+                .toList();
+
+        return sortedUsers.stream().map(u -> UserBestPublisher.of(u, userAppliesMap.get(u))).toList();
+    }
+
+    public UserMostAppliers getFiveBestAppliers() {
+        List<User> allUser = repo.findAll();
+        List<Apply> allApplyMonth = tournamentRepository.getAllApplyByCreatedAtMonth(LocalDate.now().getMonthValue());
+        List<User> sortedUsers = new ArrayList<>();
+        Map<User, Integer> userAppliesMap = new HashMap<>();
+        List<UserBestPublisher> finish = new ArrayList<>();
+        for (User user : allUser) {
+            int actualNumber = (int) allApplyMonth.stream()
+                    .filter(a -> a.getAuthor().getId().equals(user.getId()))
+                    .count();
+
+            userAppliesMap.put(user, actualNumber);
+        }
+
+        sortedUsers = userAppliesMap.entrySet().stream()
+                .sorted(Map.Entry.<User, Integer>comparingByValue().reversed())
+                .limit(5)
+                .map(Map.Entry::getKey)
+                .toList();
+
+
+        for (User user : sortedUsers) {
+            UserBestPublisher userResult = UserBestPublisher.of(user, userAppliesMap.get(user));
+            finish.add(userResult);
+        }
+
+        return UserMostAppliers.of(finish, allApplyMonth.size());
     }
 }

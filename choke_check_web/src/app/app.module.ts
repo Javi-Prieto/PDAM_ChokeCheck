@@ -17,6 +17,10 @@ import { NotFoundPageComponent } from './ui/not-found-page/not-found-page.compon
 import { HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient, withFetch } from '@angular/common/http';
 import { LoggerInterceptor } from './logger.interceptor';
 import { RemoveWrapperInterceptor } from './remove-wrapper-interceptor';
+import { BestAppliersChartComponent } from './components/best-appliers-chart/best-appliers-chart.component';
+import { BaseChartDirective, provideCharts, withDefaultRegisterables } from 'ng2-charts';
+import { GymPosterRadialChartComponent } from './components/gym-poster-radial-chart/gym-poster-radial-chart.component';
+import { UserPosterListComponent } from './components/user-poster-list/user-poster-list.component';
 
 @NgModule({
   declarations: [
@@ -29,14 +33,18 @@ import { RemoveWrapperInterceptor } from './remove-wrapper-interceptor';
     SettingsPageComponent,
     LoginPageComponent,
     LoggedSectionComponent,
-    NotFoundPageComponent
+    NotFoundPageComponent,
+    BestAppliersChartComponent,
+    GymPosterRadialChartComponent,
+    UserPosterListComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    NgbModule
+    BaseChartDirective,
+    NgbModule,
   ],
   providers: [
     provideClientHydration(),
@@ -44,7 +52,8 @@ import { RemoveWrapperInterceptor } from './remove-wrapper-interceptor';
       provide: HTTP_INTERCEPTORS,
       useClass: RemoveWrapperInterceptor,
       multi: true
-    }
+    },
+    provideCharts(withDefaultRegisterables())
   ],
   bootstrap: [AppComponent]
 })

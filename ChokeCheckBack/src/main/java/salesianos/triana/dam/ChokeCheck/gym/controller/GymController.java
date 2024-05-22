@@ -15,11 +15,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import salesianos.triana.dam.ChokeCheck.assets.MyPage;
+import salesianos.triana.dam.ChokeCheck.gym.dto.GymPercentageResponse;
+import salesianos.triana.dam.ChokeCheck.gym.dto.GymPercentageTournamentResponse;
 import salesianos.triana.dam.ChokeCheck.gym.dto.GymRequest;
 import salesianos.triana.dam.ChokeCheck.gym.dto.GymResponse;
 import salesianos.triana.dam.ChokeCheck.gym.model.Gym;
 import salesianos.triana.dam.ChokeCheck.gym.service.GymService;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -174,4 +177,63 @@ public class GymController {
         service.deleteGym(id);
         return ResponseEntity.noContent().build();
     }
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Obtains all the Gym paged", content = {
+                    @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = GymResponse.class)),
+                            examples = {@ExampleObject(
+                                    value = """
+                                                {
+                                                    "totalTournaments": 4,
+                                                    "gyms": [
+                                                        {
+                                                            "gymName": "Sutemi MMA",
+                                                            "percentage": 50
+                                                        },
+                                                        {
+                                                            "gymName": "Gracie",
+                                                            "percentage": 50
+                                                        }
+                                                    ]
+                                                }
+                                            """
+                            )}
+                    )}),
+            @ApiResponse(responseCode = "401",
+                    description = "Not logged user",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = GymResponse.class)),
+                            examples = {@ExampleObject(
+                                    """
+                                        {
+                                            "error": "You can not do this"
+                                        }
+                                    """
+                            )
+                            })),
+            @ApiResponse(responseCode = "403",
+                    description = "Acces Denied",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = GymResponse.class)),
+                            examples = {@ExampleObject(
+                                    """
+                                    {
+                                        "status": "FORBIDDEN",
+                                        "message": "Access Denied",
+                                        "path": "/gym",
+                                        "dateTime": "19/03/2024 14:22:07"
+                                    }
+                                    """
+                            )
+                            }))
+    })
+    @Operation(summary = "Find all the Gyms", description = "Returns a paged list of all the Gym in the api")
+    @GetMapping("/percentage")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public GymPercentageResponse getPercentageOfTournamentPublished(){
+        return service.getPercentageGym();
+    }
+
+
 }
