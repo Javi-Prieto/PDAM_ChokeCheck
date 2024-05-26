@@ -40,7 +40,7 @@
 <div class="d-flex justify-content-center p-2 m-auto align-middle">
 	<ngb-pagination
 		[collectionSize]="gymsInfo == null ?  0: gymsInfo.totalElements"
-		[(page)]="gymsInfo == null ?  0: gymsInfo.pageNumber"
+		[(page)]="gymsInfo.pageNumber"
 		[pageSize]="gymsInfo == null ?  0: gymsInfo.size"
 		(pageChange)="refreshGyms()"
 	>
@@ -78,19 +78,18 @@
 						<div id="loErr" class="text-danger">{{lonErr}}</div>
 					</div>
 				</div>
-				<div class="btn-lg mb-5 mt-4" ngbDropdown role="group" aria-label="Button group with nested dropdown">
-					<button type="button" class="btn btn-outline-secondary" ngbDropdownToggle>Select the gym Average Color</button>
-					<div class="dropdown-menu" ngbDropdownMenu>
-						<button ngbDropdownItem (click)="gymAvgBelt = 'WHITE'">White</button>
-						<button ngbDropdownItem (click)="gymAvgBelt = 'BLUE'">Blue</button>
-						<button ngbDropdownItem (click)="gymAvgBelt = 'PURPLE'">Purple</button>
-						<button ngbDropdownItem (click)="gymAvgBelt = 'BROWN'">Brown</button>
-						<button ngbDropdownItem (click)="gymAvgBelt = 'BLACK'">Black</button>
-						<button ngbDropdownItem (click)="gymAvgBelt = 'RED_BLACK'">Red Black</button>
-						<button ngbDropdownItem (click)="gymAvgBelt = 'RED_WHITE'">Red White</button>
-						<button ngbDropdownItem (click)="gymAvgBelt = 'RED'">Red</button>
-					</div>
-				</div>
+				<label for="sel" class="form-label">Gym Average belt</label>
+				<select class="form-select mb-3" aria-label="Default select example">
+					<option [selected]="gymAvgBelt == '' " disabled>Select the gym average belt</option>
+					<option (click)="gymAvgBelt = 'WHITE'" [selected]="gymAvgBelt == 'WHITE' ">White</option>
+					<option (click)="gymAvgBelt = 'BLUE'"  [selected]="gymAvgBelt == 'BLUE' ">Blue</option>
+					<option (click)="gymAvgBelt = 'PURPLE'"  [selected]="gymAvgBelt == 'PURPLE' ">Purple</option>
+					<option (click)="gymAvgBelt = 'BROWN'" value="3" [selected]="gymAvgBelt == 'BROWN' ">Brown</option>
+					<option (click)="gymAvgBelt = 'BLACK'" value="3" [selected]="gymAvgBelt == 'BLACK' ">Black</option>
+					<option (click)="gymAvgBelt = 'RED_BLACK'" value="3" [selected]="gymAvgBelt == 'RED_BLACK' ">Red Black</option>
+					<option (click)="gymAvgBelt = 'RED_WHITE'" value="3" [selected]="gymAvgBelt == 'RED_WHITE' ">Red White</option>
+					<option (click)="gymAvgBelt = 'RED'" value="3" [selected]="gymAvgBelt == 'RED' ">Red</option>
+				</select>
 				<button type="button" class="btn btn-dark" (click)="toSave()">Guardar</button>
 				
 			</div>
