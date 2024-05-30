@@ -5,6 +5,7 @@ import 'package:choke_check_front/data/auth/services/auth_service.dart';
 import 'package:choke_check_front/models/request/register_request.dart';
 import 'package:choke_check_front/ui/pages/home_page.dart';
 import 'package:choke_check_front/ui/pages/login_page.dart';
+import 'package:choke_check_front/ui/pages/upload_belt_photo_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -101,7 +102,7 @@ class _RegisterPageState extends State<RegisterPage> {
           listener: (context, state) {
             if (state is DoRegisterSuccess) {
               Navigator.push(context,
-                  CupertinoPageRoute(builder: (context) => const HomePage()));
+                  CupertinoPageRoute(builder: (context) => UploadBeltPhotoScreen(beltSelected: beltColorController)));
             }
           },
         ),
