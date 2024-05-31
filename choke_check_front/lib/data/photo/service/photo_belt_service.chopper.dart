@@ -18,14 +18,20 @@ final class _$PhotoBeltService extends PhotoBeltService {
   final Type definitionType = PhotoBeltService;
 
   @override
-  Future<Response<dynamic>> validateBelt(File file) {
+  Future<Response<dynamic>> validateBelt(MultipartFile file) {
     final Uri $url = Uri.parse('validate_belt_color');
-    final $body = file;
+    final List<PartValue> $parts = <PartValue>[
+      PartValueFile<MultipartFile>(
+        'file',
+        file,
+      )
+    ];
     final Request $request = Request(
       'POST',
       $url,
       client.baseUrl,
-      body: $body,
+      parts: $parts,
+      multipart: true,
     );
     return client.send<dynamic, dynamic>($request);
   }

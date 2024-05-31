@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:choke_check_front/blocs/belt_photo/belt_photo_bloc.dart';
@@ -17,13 +16,13 @@ class UploadBeltPhotoScreen extends StatefulWidget {
 
   const UploadBeltPhotoScreen({super.key, required this.beltSelected});
 
-
   @override
   State<UploadBeltPhotoScreen> createState() => _UploadBeltPhotoScreenState();
 }
 
 class _UploadBeltPhotoScreenState extends State<UploadBeltPhotoScreen> {
-  PhotoBeltRepository photoBeltRepository = PhotoBeltRepositoryImpl(photoBeltService: PhotoBeltService.create());
+  PhotoBeltRepository photoBeltRepository =
+      PhotoBeltRepositoryImpl(photoBeltService: PhotoBeltService.create());
   late BeltPhotoBloc _beltPhotoBloc;
 
   @override
@@ -32,16 +31,24 @@ class _UploadBeltPhotoScreenState extends State<UploadBeltPhotoScreen> {
     _beltPhotoBloc = BeltPhotoBloc(photoBeltRepository);
   }
 
-  void pickImageBeltFile() async{
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.image
-    );
+  void pickImageBeltFile(){
+    FilePicker.platform
+        .pickFiles(
+      type: FileType.image,
+      allowMultiple: false,
+    ).then((result) {
+      print("SUCCESS :: Inside");
 
-    if(result != null){
-      File file = File(result.files.first.path!);
-    }else{
-      print("Not file selected");
-    }
+      if (result != null) {
+        File file = File(result.files.first.path!);
+        print("SUCCESS :: very Inside");
+        _beltPhotoBloc.add(
+            ValidateBeltEvent(file: file, selectedBelt: widget.beltSelected));
+        print("SUCCESS :: very very Inside");
+      } else {
+        print("ERROR :: Not file selected");
+      }
+    });
   }
 
   @override
@@ -75,48 +82,51 @@ class _UploadBeltPhotoScreenState extends State<UploadBeltPhotoScreen> {
           },
           builder: (context, state) {
             if (state is BeltPhotoInitial) {
-              return buildInitialPage();
+              return buildInitialPage(context);
             } else if (state is ValidateBeltLoading) {
-              return const SafeArea(child: Center(child: CircularProgressIndicator()));
+              return const SafeArea(
+                  child: Center(child: CircularProgressIndicator()));
             } else if (state is ValidateBeltError) {
               return Center(
                   child: Column(
-                    children: [
-                      const SizedBox(
-                        height: 200,
-                      ),
-                      Text(state.errorMessage),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                  builder: (context) => UploadBeltPhotoScreen(beltSelected: widget.beltSelected)));
-                        },
-                        child: const Text("Back to the Page"),
-                      )
-                    ],
-                  ));
+                children: [
+                  const SizedBox(
+                    height: 200,
+                  ),
+                  Text(state.errorMessage),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                              builder: (context) => UploadBeltPhotoScreen(
+                                  beltSelected: widget.beltSelected)));
+                    },
+                    child: const Text("Back to the Page"),
+                  )
+                ],
+              ));
             } else if (state is ValidateBeltNotTheSameError) {
               return Center(
                   child: Column(
-                    children: [
-                      const SizedBox(
-                        height: 200,
-                      ),
-                      Text(state.errorMessage),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                  builder: (context) => UploadBeltPhotoScreen(beltSelected: widget.beltSelected)));
-                        },
-                        child: const Text("Back to the Page"),
-                      )
-                    ],
-                  ));
-            }else {
+                children: [
+                  const SizedBox(
+                    height: 200,
+                  ),
+                  Text(state.errorMessage),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                              builder: (context) => UploadBeltPhotoScreen(
+                                  beltSelected: widget.beltSelected)));
+                    },
+                    child: const Text("Back to the Page"),
+                  )
+                ],
+              ));
+            } else {
               return Text(state.toString());
             }
           },
@@ -134,21 +144,20 @@ class _UploadBeltPhotoScreenState extends State<UploadBeltPhotoScreen> {
       ),
     );
   }
-  
-  Widget buildInitialPage(){
+
+  Widget buildInitialPage(BuildContext context) {
     return SafeArea(
-        child: Center(
-          child: Row(
-            children: [
-              IconButton(
-                  onPressed: (){},
-                  icon: const Icon(Icons.camera_alt)),
-              IconButton(
-                  onPressed: (){},
-                  icon: const Icon(Icons.file_upload_outlined)),
-            ],
-          ),
+      child: Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IconButton(onPressed: () {}, icon: const Icon(Icons.camera_alt)),
+            IconButton(
+                onPressed: pickImageBeltFile,
+                icon: const Icon(Icons.file_upload_outlined)),
+          ],
         ),
-      );
+      ),
+    );
   }
 }

@@ -18,9 +18,12 @@ class BeltPhotoBloc extends Bloc<BeltPhotoEvent, BeltPhotoState> {
   }
 
   void _validateBelt(ValidateBeltEvent event, Emitter<BeltPhotoState> emit) async{
+    print("SUCCESS :: PRELOADING");
     emit(ValidateBeltLoading());
+    print("SUCCESS :: EVENT");
     try{
       final ValidateBeltResponse response = await photoBeltRepository.validateBelt(event.file);
+      print("SUCCESS :: $response");
       if(response.beltColor!.toLowerCase() == event.selectedBelt.toLowerCase()){
         emit(ValidateBeltSuccess());
       }else{
