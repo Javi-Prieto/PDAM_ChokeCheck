@@ -12,7 +12,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+  final String beltPhoto;
+
+  const RegisterPage({super.key, required this.beltPhoto});
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -86,7 +88,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       Navigator.push(
                           context,
                           CupertinoPageRoute(
-                              builder: (context) => const RegisterPage()));
+                              builder: (context) => RegisterPage(beltPhoto: widget.beltPhoto,)));
                     },
                     child: const Text("Back to the Form"),
                   )
@@ -102,7 +104,7 @@ class _RegisterPageState extends State<RegisterPage> {
           listener: (context, state) {
             if (state is DoRegisterSuccess) {
               Navigator.push(context,
-                  CupertinoPageRoute(builder: (context) => UploadBeltPhotoScreen(beltSelected: beltColorController)));
+                  CupertinoPageRoute(builder: (context) => const HomePage()));
             }
           },
         ),
@@ -438,7 +440,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 age: int.parse(ageNumberController.text),
                                 beltColor: beltColorController,
                                 byte: int.parse(sexController));
-                            _registerBloc.add(DoRegisterEvent(user: newUser));
+                            _registerBloc.add(DoRegisterEvent(user: newUser, selectedBelt: widget.beltPhoto));
                           }
                         },
                         child: const Text(
@@ -487,6 +489,8 @@ class _RegisterPageState extends State<RegisterPage> {
       return const Text('Not valid weight');
     } else if (message.contains('height')) {
       return const Text('Not valid height');
+    }else if (message.contains('belt')) {
+      return Text(message);
     } else {
       return const Text('Not valid data');
     }

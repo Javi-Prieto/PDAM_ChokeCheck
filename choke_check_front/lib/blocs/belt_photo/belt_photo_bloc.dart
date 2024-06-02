@@ -24,11 +24,7 @@ class BeltPhotoBloc extends Bloc<BeltPhotoEvent, BeltPhotoState> {
     try{
       final ValidateBeltResponse response = await photoBeltRepository.validateBelt(event.file);
       print("SUCCESS :: $response");
-      if(response.beltColor!.toLowerCase() == event.selectedBelt.toLowerCase()){
-        emit(ValidateBeltSuccess());
-      }else{
-        emit(ValidateBeltNotTheSameError(errorMessage: 'The belt picked and the photo is not the same'));
-      }
+      emit(ValidateBeltSuccess(belt: response.beltColor!, ));
     }on Exception catch (e){
       emit(ValidateBeltError(errorMessage: e.toString()));
     }

@@ -7,7 +7,10 @@ final class BeltPhotoInitial extends BeltPhotoState {}
 
 final class ValidateBeltLoading extends BeltPhotoState {}
 
-final class ValidateBeltSuccess extends BeltPhotoState {}
+final class ValidateBeltSuccess extends BeltPhotoState {
+  final String belt;
+  ValidateBeltSuccess({required this.belt});
+}
 
 final class ValidateBeltNotTheSameError extends BeltPhotoState {
   final String errorMessage;

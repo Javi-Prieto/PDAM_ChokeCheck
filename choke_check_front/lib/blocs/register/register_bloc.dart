@@ -18,11 +18,15 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     final SharedPreferences prefs = await _prefs;
     try {
       final response = await authRepository.register(event.user);
-      prefs.clear();
-      prefs.setString('bearer_token', response.token!);
-      prefs.setString('username', response.username!);
-      prefs.setString('user_belt', response.userBeltColor!);
-      emit(DoRegisterSuccess());
+      if(response.userBeltColor!.toLowerCase() == event.selectedBelt.toLowerCase()){
+        prefs.clear();
+        prefs.setString('bearer_token', response.token!);
+        prefs.setString('username', response.username!);
+        prefs.setString('user_belt', response.userBeltColor!);
+        emit(DoRegisterSuccess());
+      }else{
+        emit(DoRegisterError('The belt selected and the belt of the photo does not correspond'));
+      }
       return;
     } on Exception catch (e) {
       emit(DoRegisterError(e.toString()));

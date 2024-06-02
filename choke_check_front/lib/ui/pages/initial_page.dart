@@ -1,5 +1,6 @@
 import 'package:choke_check_front/ui/pages/login_page.dart';
 import 'package:choke_check_front/ui/pages/register_page.dart';
+import 'package:choke_check_front/ui/pages/upload_belt_photo_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -76,7 +77,7 @@ class InitialPage extends StatelessWidget {
                       Navigator.push(
                           context,
                           CupertinoPageRoute(
-                              builder: (context) => const RegisterPage()));
+                              builder: (context) => const UploadBeltPhotoScreen()));
                     },
                     child: const Text(
                       "Register",
