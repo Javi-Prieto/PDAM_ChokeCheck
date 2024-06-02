@@ -4,6 +4,7 @@ import 'package:choke_check_front/data/auth/repository/auth_repository_impl.dart
 import 'package:choke_check_front/data/auth/services/auth_service.dart';
 import 'package:choke_check_front/ui/pages/home_page.dart';
 import 'package:choke_check_front/ui/pages/register_page.dart';
+import 'package:choke_check_front/ui/pages/upload_belt_photo_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -187,7 +188,7 @@ class _LoginPageState extends State<LoginPage> {
                                 context,
                                 CupertinoPageRoute(
                                     builder: (context) =>
-                                        const RegisterPage()));
+                                        const UploadBeltPhotoScreen()));
                           },
                           child: const Text(
                             'Register',
