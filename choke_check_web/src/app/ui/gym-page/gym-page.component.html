@@ -40,7 +40,7 @@
 <div class="d-flex justify-content-center p-2 m-auto align-middle">
 	<ngb-pagination
 		[collectionSize]="gymsInfo == null ?  0: gymsInfo.totalElements"
-		[(page)]="gymsInfo.pageNumber"
+		[(page)]="pageNumber"
 		[pageSize]="gymsInfo == null ?  0: gymsInfo.size"
 		(pageChange)="refreshGyms()"
 	>

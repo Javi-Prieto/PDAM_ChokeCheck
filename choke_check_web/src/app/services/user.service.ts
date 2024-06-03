@@ -15,8 +15,8 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  getUsers():Observable<UserListResponse>{
-    return this.http.get<UserListResponse>(`${environment.apiBaseUrl}user/`);
+  getUsers(page: number):Observable<UserListResponse>{
+    return this.http.get<UserListResponse>(`${environment.apiBaseUrl}user/?page=${page}`);
   }
 
   createUser(created: CreateUserRequest):Observable<User>{

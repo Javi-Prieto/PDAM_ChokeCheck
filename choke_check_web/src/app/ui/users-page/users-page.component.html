@@ -43,7 +43,7 @@
 <div class="d-flex justify-content-center p-2 m-auto align-middle">
 	<ngb-pagination
 		[collectionSize]="usersInfo.totalElements"
-		[(page)]="usersInfo.pageNumber"
+		[(page)]="pageNumber"
 		[pageSize]="usersInfo.size"
 		(pageChange)="refreshUsers()"
 	>

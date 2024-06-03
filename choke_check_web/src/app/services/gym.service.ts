@@ -13,8 +13,8 @@ export class GymService {
 
   constructor(private http: HttpClient) { }
 
-  getGyms():Observable<GymListResponse>{
-    return this.http.get<GymListResponse>(`${environment.apiBaseUrl}gym`);
+  getGyms(page:number):Observable<GymListResponse>{
+    return this.http.get<GymListResponse>(`${environment.apiBaseUrl}gym?page=${page}`);
   }
   createGym(newGym: CreateGymRequest):Observable<Gym>{
     return this.http.post<Gym>(`${environment.apiBaseUrl}gym`, 

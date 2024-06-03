@@ -37,7 +37,7 @@ export class UsersPageComponent {
   userRol: Number = 0;
   userId: String = '';
   isEditting = false;
-
+  pageNumber: number = 0;
 
 
 
@@ -45,7 +45,13 @@ export class UsersPageComponent {
   constructor(private userService: UserService, private modalService: NgbModal){}
 
   ngOnInit(): void {
-    this.userService.getUsers().subscribe({
+    this.refreshUsers();
+  }
+  getSex(sex:number){
+    return sex ==0 ? 'Male' : 'Female';
+  }
+  refreshUsers() {
+    this.userService.getUsers(this.pageNumber -1).subscribe({
       next: resp => {
         this.usersInfo = resp;
         this.users = resp.content;
@@ -53,12 +59,6 @@ export class UsersPageComponent {
         console.log(err.toString());
       }
     });
-  }
-  getSex(sex:number){
-    return sex ==0 ? 'Male' : 'Female';
-  }
-  refreshUsers() {
-    throw new Error('Method not implemented.');
   }
   open(content: TemplateRef<any>) {
     this.userName = '';
