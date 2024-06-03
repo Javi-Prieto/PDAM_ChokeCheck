@@ -26,21 +26,13 @@ export class GymPageComponent implements OnInit {
   gymAvgBelt !: String;
   isEdit = false;
   gymId: String = ''; 
+  pageNumber: number = 0; 
 
   constructor(private gymService: GymService, private modalService: NgbModal){}
 
   ngOnInit(): void {
-    this.gymService.getGyms().subscribe({
-      next: resp => {
-        if(resp != null){
-          this.gymsInfo = resp;
-          this.gyms = resp.content;
-        }
-        
-      },error: err =>{
-        console.log(err.toString());
-      }
-    });
+    this.refreshGyms();
+    
   }
 
   open(content: TemplateRef<any>) {
@@ -60,7 +52,18 @@ export class GymPageComponent implements OnInit {
 	}
 
   refreshGyms() {
-    throw new Error('Method not implemented.');
+    this.gymService.getGyms(this.pageNumber -1).subscribe({
+      next: resp => {
+        if(resp != null){
+          console.log(resp);
+          this.gymsInfo = resp;
+          this.gyms = resp.content;
+        }
+        
+      },error: err =>{
+        console.log(err.toString());
+      }
+    });
   }
 
   toSave() {

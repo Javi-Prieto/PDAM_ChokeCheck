@@ -38,19 +38,14 @@ export class TournamentsPageComponent {
   creatorGymId: String = '';
   tournamentId: String = '';
   isEdit:boolean= false;
+  pageNumber: number = 0;
 
   constructor(private tournamentService: TournamentService, private gymService: GymService, private modalService: NgbModal){}
 
   ngOnInit(): void {
-    this.tournamentService.getTournaments().subscribe({
-      next: resp => {
-        this.tournamentsInfo = resp;
-        this.tournaments = resp.content;
-      },error: err =>{
-        console.log(err.toString());
-      }
-    });
-    this.gymService.getGyms().subscribe({
+    this.refreshTournaments();
+    
+    this.gymService.getGyms(0).subscribe({
       next: resp => {
         if(resp != null){
           this.gyms = resp.content;
@@ -62,7 +57,14 @@ export class TournamentsPageComponent {
     });
   }
   refreshTournaments() {
-    throw new Error('Method not implemented.');
+    this.tournamentService.getTournaments(this.pageNumber - 1).subscribe({
+      next: resp => {
+        this.tournamentsInfo = resp;
+        this.tournaments = resp.content;
+      },error: err =>{
+        console.log(err.toString());
+      }
+    });
   }
 
   open(content: TemplateRef<any>) {

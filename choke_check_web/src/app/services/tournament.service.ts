@@ -12,8 +12,8 @@ export class TournamentService {
 
   constructor(private http:HttpClient) { }
 
-  getTournaments():Observable<TournamentListResponse>{
-    return this.http.get<TournamentListResponse>(`${environment.apiBaseUrl}tournament/table`);
+  getTournaments(page: number):Observable<TournamentListResponse>{
+    return this.http.get<TournamentListResponse>(`${environment.apiBaseUrl}tournament/table?page=${page}`);
   }
 
   createTournament(newTournament: CreateTournamentRequest):Observable<Tournament>{
