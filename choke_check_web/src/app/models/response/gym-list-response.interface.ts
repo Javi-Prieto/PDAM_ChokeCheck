@@ -14,6 +14,7 @@ export interface Gym {
     id:                string;
     name:              string;
     avgBelt:           string;
+    city:              string;
     latitude:          number;
     altitude:          number;
     numberTournaments: number;

@@ -41,6 +41,7 @@ export class GymPageComponent implements OnInit {
     this.lat = 0;
     this.isEdit =false;
     this.gymAvgBelt = '';
+    this.gymCity = '';
 		this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then(
 			(result) => {
 				console.log( `Closed with: ${result}`);
@@ -140,6 +141,7 @@ export class GymPageComponent implements OnInit {
     this.lon = gym.altitude;
     this.lat = gym.latitude;
     this.gymAvgBelt = gym.avgBelt;
+    this.gymCity = gym.city;
     this.isEdit = true;
     this.gymId = gym.id;
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then(
