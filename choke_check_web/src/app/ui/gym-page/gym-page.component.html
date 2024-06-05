@@ -5,6 +5,7 @@
 			<th scope="col">Gym Id</th>
 			<th scope="col">Gym Name</th>
 			<th scope="col">Avg Belt</th>
+			<th scope="col">Gym City</th>
 			<th scope="col">Latitude</th>
             <th scope="col">Altitude</th>
             <th scope="col">Number of Tournaments</th>
@@ -19,6 +20,7 @@
 					{{ gym.name }}
 				</td>
 				<td>{{ gym.avgBelt }}</td>
+				<td>{{ gym.city }}</td>
 				<td>{{ gym.latitude | number }}</td>
                 <td>{{ gym.altitude | number }}</td>
                 <td class="text-center">{{ gym.numberTournaments | number }}</td>

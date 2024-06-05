@@ -4,7 +4,7 @@ import lombok.Builder;
 import salesianos.triana.dam.ChokeCheck.gym.model.Gym;
 
 @Builder
-public record GymResponse(String id, String name, String avgBelt, double latitude, double altitude, int numberTournaments) {
+public record GymResponse(String id, String name, String city, String avgBelt, double latitude, double altitude, int numberTournaments) {
 
     public static GymResponse of(Gym gym){
         return GymResponse.builder()
@@ -13,6 +13,7 @@ public record GymResponse(String id, String name, String avgBelt, double latitud
                 .avgBelt(gym.getAvgLevel().toString())
                 .altitude(gym.getLocation().getLat())
                 .latitude(gym.getLocation().getLon())
+                .city(gym.getLocation().getCity())
                 .numberTournaments(gym.getTournaments().size())
                 .build();
     }
@@ -23,6 +24,7 @@ public record GymResponse(String id, String name, String avgBelt, double latitud
                 .avgBelt(gym.getAvgLevel().toString())
                 .altitude(gym.getLocation().getLat())
                 .latitude(gym.getLocation().getLon())
+                .city(gym.getLocation().getCity())
                 .build();
     }
 }
