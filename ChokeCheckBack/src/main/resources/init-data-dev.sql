@@ -67,3 +67,39 @@ insert into tournament (created_at, higher_belt, max_weight , min_weight , parti
 insert into gym_tournaments (gym_id, tournaments_id) values ('96c7fea6-489e-4a2b-b2dc-53d51ce31c84', '53bd8e14-f90b-45cb-801c-dc72f846bb29');
 insert into apply (created_at, author_id, tournament_id) values (CURRENT_DATE, 'c2f86ad9-8e2c-448d-92e6-39b25e690ec6', '53bd8e14-f90b-45cb-801c-dc72f846bb29');
 insert into tournament_applies (applies_author_id, applies_tournament_id, tournament_id) values ('c2f86ad9-8e2c-448d-92e6-39b25e690ec6', '53bd8e14-f90b-45cb-801c-dc72f846bb29', '53bd8e14-f90b-45cb-801c-dc72f846bb29');
+
+insert into post(created_at, type, author_id, id , content , title ) values (CURRENT_DATE, 0, '1ce9c1c7-7a02-4c7f-bf69-6d0306cbed68', '9d1b63d9-2b6a-4c0e-9200-1b7a792c7c1d', '3x5min|Jump Ropes,4x3min|Pads,5x5min|Sparring', 'Intense Morning Session');
+
+insert into post(created_at, type, author_id, id , content , title) values (CURRENT_DATE, 1, '1ce9c1c7-7a02-4c7f-bf69-6d0306cbed68', 'c3f8e1ad-68d7-4fbe-b0d6-846dabc74a1a', 'Remember to always keep your hands up and stay on your toes.', 'Defensive Drills');
+
+insert into post(created_at, type, author_id, id , content , title ) values (CURRENT_DATE, 2, '1ce9c1c7-7a02-4c7f-bf69-6d0306cbed68', '39dbb6ae-4863-4420-a0f0-6bc1f02b23fc', 'Just received my blue belt after months of hard work!', 'Achieved Blue Belt');
+
+insert into post(created_at, type, author_id, id , content , title ) values (CURRENT_DATE, 0, 'c2f86ad9-8e2c-448d-92e6-39b25e690ec6', 'd2ecf2b3-4153-47f1-936b-5dbd8c2e2c3e', '4x3min|Jump Ropes,3x5min|Pads,6x3min|Sparring', 'Evening Training');
+
+insert into post(created_at, type, author_id, id , content , title) values (CURRENT_DATE, 1, 'c2f86ad9-8e2c-448d-92e6-39b25e690ec6', '3eae35c7-ef33-4b28-9b57-474451b671f2', 'Focus on your footwork to improve your speed and agility.', 'Footwork Fundamentals');
+
+insert into post(created_at, type, author_id, id , content , title ) values (CURRENT_DATE, 2, 'c2f86ad9-8e2c-448d-92e6-39b25e690ec6', 'b0f3d6a8-4bb9-4c74-bf96-2329b1bb92f4', 'Participated in my first competition today!', 'First Competition Experience');
+
+insert into post(created_at, type, author_id, id , content , title ) values (CURRENT_DATE, 0, '0fa762a2-05bb-44e7-8af4-0ec72107289a', '8c96d3b4-30cc-4b9c-8a57-fcf3a8d8d6e1', '5x3min|Jump Ropes,5x3min|Pads,7x3min|Sparring', 'Afternoon Sparring Session');
+
+insert into post(created_at, type, author_id, id , content , title) values (CURRENT_DATE, 1, '0fa762a2-05bb-44e7-8af4-0ec72107289a', '99d4d0ab-49e2-4a1d-8aef-2b80e5d504e7', 'Drill your escapes every session to stay sharp.', 'Escape Drills');
+
+insert into post(created_at, type, author_id, id , content , title ) values (CURRENT_DATE, 2, '0fa762a2-05bb-44e7-8af4-0ec72107289a', '6d9d4179-8ab7-42f0-85f7-fb1563b486b1', 'Excited to share that I have been promoted to assistant coach!', 'New Role Announcement');
+
+insert into post(created_at, type, author_id, id , content , title ) values (CURRENT_DATE, 0, '457321e6-2208-44fc-97b0-924ad40a584b', 'c5f8b25b-dba6-4c7c-9454-85a2d91d3f5b', '4x4min|Jump Ropes, 3x5min|Pads, 6x4min|Sparring', 'Saturday Morning Drills');
+
+insert into post(created_at, type, author_id, id , content , title) values (CURRENT_DATE, 1, '457321e6-2208-44fc-97b0-924ad40a584b', 'a2d6f2f4-712b-4c4b-b8b2-b6e77b9a54bc', 'Work on your breathing techniques to enhance endurance.', 'Breathing Techniques');
+
+insert into post(created_at, type, author_id, id , content , title ) values (CURRENT_DATE, 2, '457321e6-2208-44fc-97b0-924ad40a584b', 'ec8a6d7a-1744-49bc-8cc4-e2d4c6e43978', 'I have switched to a new training gym and it is amazing!', 'New Training Gym');
+
+insert into post(created_at, type, author_id, id , content , title ) values (CURRENT_DATE, 0, 'd6c884c5-0c6c-41a3-8233-7daccc3998a1', 'c4e9e8a7-7166-41b6-8bda-2f43e1e6b2a7', '4x5min|Jump Ropes,3x4min|Pads,5x5min|Sparring', 'Sunday Evening Session');
+
+insert into post(created_at, type, author_id, id , content , title) values (CURRENT_DATE, 1, 'd6c884c5-0c6c-41a3-8233-7daccc3998a1', 'e1dbba2e-2a7d-4e37-9eb0-0cf4b19415e4', 'Make sure to hydrate well before and after training.', 'Hydration Tips');
+
+insert into post(created_at, type, author_id, id , content , title ) values (CURRENT_DATE, 2, 'd6c884c5-0c6c-41a3-8233-7daccc3998a1', 'ab3b4baf-9f6a-4267-b96d-cd7d7a6dfbd0', 'I am excited to announce my first victory in a local tournament!', 'First Tournament Win');
+
+insert into post(created_at, type, author_id, id , content , title ) values (CURRENT_DATE, 0, '68bbb6fe-f4d2-49ab-8c88-3beaf6e854d2', 'ddc1e25c-2f4b-4e1c-87f8-f2d8e9a3fc1a', '3x3min|Jump Ropes,4x5min|Pads,6x3min|Sparring', 'Midweek Intense Workout');
+
+insert into post(created_at, type, author_id, id , content , title) values (CURRENT_DATE, 1, '68bbb6fe-f4d2-49ab-8c88-3beaf6e854d2', 'dcaebce7-3787-437a-ae8e-68eadddd94d7', 'Do not forget to stretch well before and after sessions.', 'Stretching Importance');
+
+insert into post(created_at, type, author_id, id , content , title ) values (CURRENT_DATE, 2, '68bbb6fe-f4d2-49ab-8c88-3beaf6e854d2', 'a4c69a9a-9a02-4c6f-9d08-1a2fb8dc0749', 'I have just completed a month of consistent training!', 'Training Milestone');

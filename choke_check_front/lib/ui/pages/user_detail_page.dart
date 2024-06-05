@@ -509,7 +509,7 @@ class _UserDetailPageState extends State<UserDetailPage> {
                       _userBloc
                           .add(FetchUserDetailEvent(username: widget.username));
                     } else if (state is CreateRateSuccess) {
-                      _postBloc.add(PostFetchEvent());
+                      _postBloc.add(PostFetchEvent(pageNumber: 0));
                     }
                   },
                   builder: (context, state) {
@@ -519,7 +519,7 @@ class _UserDetailPageState extends State<UserDetailPage> {
                           Text(state.messageError),
                           ElevatedButton(
                             onPressed: () {
-                              context.watch<PostBloc>().add(PostFetchEvent());
+                              context.watch<PostBloc>().add(PostFetchEvent(pageNumber: 0));
                             },
                             child: const Text('Retry'),
                           )

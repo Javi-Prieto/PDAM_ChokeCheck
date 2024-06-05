@@ -565,7 +565,7 @@ class _ProfilePageState extends State<ProfilePage> {
             if (state is DeletePostSuccess) {
               _userBloc.add(FetchUserDetailEvent(username: loggedUsername));
             } else if (state is CreateRateSuccess) {
-              _postBloc.add(PostFetchEvent());
+              _postBloc.add(PostFetchEvent(pageNumber: 0));
             }
           },
           builder: (context, state) {
@@ -575,7 +575,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   Text(state.messageError),
                   ElevatedButton(
                     onPressed: () {
-                      context.watch<PostBloc>().add(PostFetchEvent());
+                      context.watch<PostBloc>().add(PostFetchEvent(pageNumber: 0));
                     },
                     child: const Text('Retry'),
                   )

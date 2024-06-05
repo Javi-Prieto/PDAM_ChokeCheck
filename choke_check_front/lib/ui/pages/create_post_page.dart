@@ -101,7 +101,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
           },
           listener: (context, state) {
             if (state is CreatePostSuccess) {
-              _postBloc.add(PostFetchEvent());
+              _postBloc.add(PostFetchEvent(pageNumber: 0));
               Navigator.pop(context);
             }
           },
