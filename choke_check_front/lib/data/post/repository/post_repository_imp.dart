@@ -10,8 +10,8 @@ class PostRepositoryImpl implements PostRepository {
   PostRepositoryImpl({required this.postService});
 
   @override
-  Future<PostListResponse> getAllPost() async {
-    final response = await postService.getAllPost();
+  Future<PostListResponse> getAllPost(int number) async {
+    final response = await postService.getAllPost(number);
     if (response.isSuccessful) {
       if (response.bodyString.isEmpty) {
         throw Exception('Not valid token');

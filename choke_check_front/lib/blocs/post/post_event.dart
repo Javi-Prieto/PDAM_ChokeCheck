@@ -3,7 +3,12 @@ part of 'post_bloc.dart';
 @immutable
 sealed class PostEvent {}
 
-final class PostFetchEvent extends PostEvent {}
+final class PostFetchEvent extends PostEvent {
+  final int pageNumber;
+
+  PostFetchEvent({required this.pageNumber});
+
+}
 
 final class PostGoFormEvent extends PostEvent {}
 

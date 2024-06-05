@@ -18,8 +18,8 @@ final class _$PostService extends PostService {
   final Type definitionType = PostService;
 
   @override
-  Future<Response<dynamic>> getAllPost() {
-    final Uri $url = Uri.parse('post');
+  Future<Response<dynamic>> getAllPost(int number) {
+    final Uri $url = Uri.parse('post?page=${number}');
     final Request $request = Request(
       'GET',
       $url,

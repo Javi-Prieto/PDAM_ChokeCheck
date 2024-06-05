@@ -21,7 +21,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   }
   _onPostFetch(PostFetchEvent event, Emitter<PostState> emit) async {
     try {
-      final postResponse = await repository.getAllPost();
+      final postResponse = await repository.getAllPost(event.pageNumber);
       emit(PostFetched(postList: postResponse.content!));
       return;
     } on Exception catch (e) {

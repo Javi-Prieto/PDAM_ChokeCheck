@@ -3,7 +3,7 @@ import 'package:choke_check_front/models/response/create_post_response.dart';
 import 'package:choke_check_front/models/response/post_list_response/post_list_response.dart';
 
 abstract class PostRepository {
-  Future<PostListResponse> getAllPost();
+  Future<PostListResponse> getAllPost(int number);
 
   Future<CreatePostResponse> createPost(PostRequest post);
 

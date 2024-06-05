@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:choke_check_front/blocs/post/post_bloc.dart';
 import 'package:choke_check_front/data/post/repository/post_repository.dart';
 import 'package:choke_check_front/data/post/repository/post_repository_imp.dart';
@@ -26,14 +28,28 @@ class _PostPageState extends State<PostPage> {
   late String loggeUserBelt;
   late PostBloc _postBloc;
   late double rate;
+  final ScrollController controller = ScrollController();
+  int pageNumber = 0;
+  List<Content> postList = [];
+  int indexOfClicked = 3;
 
   @override
   void initState() {
     super.initState();
-    _postBloc = PostBloc(repository)..add(PostFetchEvent());
+    _postBloc = PostBloc(repository)..add(PostFetchEvent(pageNumber: 0));
     getLoggedUsername();
   }
+  @override
+  void dispose(){
+    super.dispose();
+    controller.dispose();
+  }
 
+  jumpTo(){
+    Timer(Duration(milliseconds: 500), (){
+      controller.animateTo(150 * indexOfClicked.toDouble(), duration: const Duration(milliseconds: 200), curve: Curves.ease);
+    });
+  }
   getLoggedUsername() async {
     prefs = await _prefs;
     loggedUserName = prefs.getString('username')!;
@@ -43,7 +59,7 @@ class _PostPageState extends State<PostPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: _postBloc..add(PostFetchEvent()),
+      value: _postBloc..add(PostFetchEvent(pageNumber: 0)),
       child: Scaffold(
           backgroundColor: Colors.white,
           body: SafeArea(
@@ -61,7 +77,7 @@ class _PostPageState extends State<PostPage> {
                     Text(state.messageError),
                     ElevatedButton(
                       onPressed: () {
-                        _postBloc.add(PostFetchEvent());
+                        _postBloc.add(PostFetchEvent(pageNumber: 0));
                       },
                       child: const Text('Retry'),
                     )
@@ -73,7 +89,7 @@ class _PostPageState extends State<PostPage> {
                     Text(state.messageError),
                     ElevatedButton(
                       onPressed: () {
-                        _postBloc.add(PostFetchEvent());
+                        _postBloc.add(PostFetchEvent(pageNumber: 0));
                       },
                       child: const Text('Retry'),
                     )
@@ -85,7 +101,7 @@ class _PostPageState extends State<PostPage> {
                     Text(state.messageError),
                     ElevatedButton(
                       onPressed: () {
-                        _postBloc.add(PostFetchEvent());
+                        _postBloc.add(PostFetchEvent(pageNumber: 0));
                       },
                       child: const Text('Retry'),
                     )
@@ -97,7 +113,7 @@ class _PostPageState extends State<PostPage> {
                     Text(state.messageError),
                     ElevatedButton(
                       onPressed: () {
-                        _postBloc.add(PostFetchEvent());
+                        _postBloc.add(PostFetchEvent(pageNumber: 0));
                       },
                       child: const Text('Retry'),
                     )
@@ -109,14 +125,17 @@ class _PostPageState extends State<PostPage> {
                     Text(state.messageError),
                     ElevatedButton(
                       onPressed: () {
-                        _postBloc.add(PostFetchEvent());
+                        _postBloc.add(PostFetchEvent(pageNumber: 0));
                       },
                       child: const Text('Retry'),
                     )
                   ],
                 );
               } else if (state is PostFetched) {
-                return _onFetched(state.postList);
+                for(Content post in state.postList){
+                  if(!postList.contains(post)) postList.add(post);
+                }
+                return _onFetched();
               } else {
                 return const Text('Not Support');
               }
@@ -133,20 +152,29 @@ class _PostPageState extends State<PostPage> {
                     CupertinoPageRoute(
                         builder: (context) => const CreatePostPage()));
               } else if (state is DeletePostSuccess) {
-                _postBloc.add(PostFetchEvent());
+                _postBloc.add(PostFetchEvent(pageNumber: 0));
               } else if (state is AddLikeSuccess) {
-                _postBloc.add(PostFetchEvent());
+                _postBloc.add(PostFetchEvent(pageNumber: 0));
               } else if (state is CreateRateSuccess) {
-                _postBloc.add(PostFetchEvent());
+                _postBloc.add(PostFetchEvent(pageNumber: 0));
               } else if (state is DeleteLikeSuccess) {
-                _postBloc.add(PostFetchEvent());
+                _postBloc.add(PostFetchEvent(pageNumber: 0));
               }
             }),
           )),
     );
   }
 
-  _onFetched(List<Content> postList) {
+  void attachListController(){
+    controller.addListener(() {
+      if(controller.position.maxScrollExtent == controller.offset){
+        pageNumber ++;
+        _postBloc.add(PostFetchEvent(pageNumber: pageNumber));
+      }
+    });
+  }
+
+  _onFetched() {
     return Column(
       children: [
         SizedBox(
@@ -169,120 +197,132 @@ class _PostPageState extends State<PostPage> {
                 ))),
         Expanded(
           child: ListView.builder(
+            controller: controller,
             itemBuilder: (BuildContext context, index) {
-              return Center(
-                child: SizedBox(
-                  width: 500,
-                  child: Card(
-                    color: Colors.grey.shade100,
-                    child: Row(
-                      children: [
-                        Container(
-                          height: 325,
-                          width: 25,
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(8),
-                                bottomLeft: Radius.circular(8)),
-                            color: _getCardColor(postList[index].type!),
+              attachListController();
+              if(index < postList.length){
+                return Center(
+                  child: SizedBox(
+                    width: 500,
+                    child: Card(
+                      color: Colors.grey.shade100,
+                      child: Row(
+                        children: [
+                          Container(
+                            height: 325,
+                            width: 25,
+                            decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(8),
+                                  bottomLeft: Radius.circular(8)),
+                              color: _getCardColor(postList[index].type!),
+                            ),
+                            child: RotatedBox(
+                                quarterTurns: -1,
+                                child: Center(
+                                    child: Text(
+                                      postList[index].type!.toUpperCase(),
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ))),
                           ),
-                          child: RotatedBox(
-                              quarterTurns: -1,
-                              child: Center(
-                                  child: Text(
-                                postList[index].type!.toUpperCase(),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Text(
+                                postList[index].title!,
+                                softWrap: true,
                                 style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
-                              ))),
-                        ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              postList[index].title!,
-                              softWrap: true,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 30),
-                              textAlign: TextAlign.center,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    CupertinoPageRoute(
-                                        builder: (context) => UserDetailPage(
-                                            username:
-                                                postList[index].authorName!)));
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                    fontWeight: FontWeight.bold, fontSize: 20),
+                                textAlign: TextAlign.center,
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      CupertinoPageRoute(
+                                          builder: (context) => UserDetailPage(
+                                              username:
+                                              postList[index].authorName!)));
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      postList[index].authorName!.toUpperCase(),
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Icon(
+                                      Icons.accessibility_new_rounded,
+                                      color: _getIconColor(
+                                          postList[index].authorBelt!),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Center(child: _getBody(postList[index])),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  Text(
-                                    postList[index].authorName!.toUpperCase(),
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold),
+                                  _getDeleteButton(postList[index]),
+                                  const SizedBox(
+                                    width: 15,
                                   ),
-                                  Icon(
-                                    Icons.accessibility_new_rounded,
-                                    color: _getIconColor(
-                                        postList[index].authorBelt!),
-                                  )
+                                  Text(
+                                    postList[index].avgRate!.toString(),
+                                    style: const TextStyle(fontSize: 20),
+                                  ),
+                                  _getStarButton(postList[index], index),
+                                  const SizedBox(
+                                    width: 15,
+                                  ),
+                                  Text(
+                                    postList[index].likes!.toString(),
+                                    style: const TextStyle(fontSize: 20),
+                                  ),
+                                  _getHeartButton(postList[index], index),
                                 ],
                               ),
-                            ),
-                            Center(child: _getBody(postList[index])),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                _getDeleteButton(postList[index]),
-                                const SizedBox(
-                                  width: 15,
-                                ),
-                                Text(
-                                  postList[index].avgRate!.toString(),
-                                  style: const TextStyle(fontSize: 20),
-                                ),
-                                _getStarButton(postList[index]),
-                                const SizedBox(
-                                  width: 15,
-                                ),
-                                Text(
-                                  postList[index].likes!.toString(),
-                                  style: const TextStyle(fontSize: 20),
-                                ),
-                                _getHeartButton(postList[index]),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 25,
-                            )
-                          ],
-                        ),
-                      ],
+                              const SizedBox(
+                                height: 25,
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              );
+                );
+              }else{
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(child: CircularProgressIndicator(color: Colors.blue.shade800,),),
+                );
+              }
+
             },
             padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 65),
-            itemCount: postList.length,
+            itemCount: postList.length + 1,
           ),
         ),
       ],
     );
+
   }
 
-  _getHeartButton(Content post) {
+  _getHeartButton(Content post, int index) {
     if (post.isLikedByLoggedUser!) {
       return IconButton(
           onPressed: () {
+            indexOfClicked = index;
             _postBloc.add(DeleteLikeEvent(id: post.id!));
           },
           icon: Icon(
@@ -293,6 +333,7 @@ class _PostPageState extends State<PostPage> {
     } else {
       return IconButton(
           onPressed: () {
+            indexOfClicked = index;
             _postBloc.add(AddLikeEvent(id: post.id!));
           },
           icon: const Icon(
@@ -362,14 +403,17 @@ class _PostPageState extends State<PostPage> {
         return Container(
           alignment: Alignment.center,
           height: 150,
+          width: 325,
           child: Text(
             '"${post.content!.toUpperCase()}"',
             softWrap: true,
+
             style: const TextStyle(
                 fontSize: 20,
+                overflow: TextOverflow.clip,
                 shadows: [
                   Shadow(
-                      color: Colors.black, blurRadius: 7, offset: Offset(1, 1)),
+                      color: Colors.black, blurRadius: 7, offset: Offset(1, 1),),
                 ],
                 fontStyle: FontStyle.italic),
           ),
@@ -378,10 +422,11 @@ class _PostPageState extends State<PostPage> {
         return Container(
             alignment: Alignment.center,
             height: 150,
+            width: 325,
             child: Text(post.content!,
                 softWrap: true,
                 style: const TextStyle(
-                  fontSize: 25,
+                  fontSize: 20,
                 )));
       default:
         return Container();
@@ -462,7 +507,7 @@ class _PostPageState extends State<PostPage> {
     }
   }
 
-  _getStarButton(Content post) {
+  _getStarButton(Content post, int index) {
     return InkWell(
       onTap: () {
         showDialog(
@@ -506,6 +551,7 @@ class _PostPageState extends State<PostPage> {
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () {
+                    indexOfClicked = index;
                     _postBloc.add(CreateRatePostEvent(post.id!, rate: rate));
                     Navigator.of(context).pop();
                   },

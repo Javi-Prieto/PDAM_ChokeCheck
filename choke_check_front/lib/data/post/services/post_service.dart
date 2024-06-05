@@ -14,8 +14,8 @@ abstract class PostService extends ChopperService {
     return _$PostService(client);
   }
 
-  @Get(path: 'post')
-  Future<Response> getAllPost();
+  @Get(path: 'post?page={number}')
+  Future<Response> getAllPost(@Path() int number);
 
   @Post(path: 'post')
   Future<Response> createPost(@Body() Map<String, dynamic> post);
