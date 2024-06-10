@@ -11,6 +11,7 @@ class CreatePostResponse {
   String? title;
   String? content;
   bool? isRatedByLoggedUser;
+  String? image;
 
   CreatePostResponse({
     this.id,
@@ -23,6 +24,7 @@ class CreatePostResponse {
     this.title,
     this.content,
     this.isRatedByLoggedUser,
+    this.image
   });
 
   factory CreatePostResponse.fromMap(Map<String, dynamic> data) {
@@ -37,6 +39,7 @@ class CreatePostResponse {
       title: data['title'] as String?,
       content: data['content'] as String?,
       isRatedByLoggedUser: data['isRatedByLoggedUser'] as bool?,
+      image: data['image'] as String?,
     );
   }
 
@@ -51,6 +54,7 @@ class CreatePostResponse {
         'title': title,
         'content': content,
         'isRatedByLoggedUser': isRatedByLoggedUser,
+        'image': image,
       };
 
   /// `dart:convert`

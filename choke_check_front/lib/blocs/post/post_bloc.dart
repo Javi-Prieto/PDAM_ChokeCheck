@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:choke_check_front/data/post/repository/post_repository.dart';
 import 'package:choke_check_front/models/request/post_request.dart';
 import 'package:choke_check_front/models/response/post_list_response/content.dart';
 import 'package:meta/meta.dart';
+import 'package:http/http.dart' show MultipartFile;
+
 
 part 'post_event.dart';
 part 'post_state.dart';
@@ -47,8 +51,13 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   _onCreatePost(CreatePostEvent event, Emitter<PostState> emit) async {
     emit(CreatePostInitial());
     try {
-      await repository.createPost(event.newPost);
-      emit(CreatePostSuccess());
+      if(event.file.path.isEmpty){
+        await repository.createPost(event.newPost);
+        emit(CreatePostSuccess());
+      }else{
+        await repository.createPostWithImage(event.file, event.newPost);
+        emit(CreatePostSuccess());
+      }
       return;
     } on Exception catch (e) {
       emit(CreatePostError(messageError: e.toString()));

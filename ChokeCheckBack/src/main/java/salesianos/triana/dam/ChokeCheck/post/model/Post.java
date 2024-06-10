@@ -63,6 +63,9 @@ public class Post {
 
     private String content;
 
+    @Builder.Default
+    private String fileName = "";
+
     public void addRate(Rate rate){
         this.rating.add(rate);
     }
