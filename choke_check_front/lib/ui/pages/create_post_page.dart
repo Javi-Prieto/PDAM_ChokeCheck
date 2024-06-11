@@ -1,8 +1,14 @@
+
+import 'dart:io';
+
+import 'package:camera/camera.dart';
 import 'package:choke_check_front/blocs/post/post_bloc.dart';
 import 'package:choke_check_front/data/post/repository/post_repository.dart';
 import 'package:choke_check_front/data/post/repository/post_repository_imp.dart';
 import 'package:choke_check_front/data/post/services/post_service.dart';
 import 'package:choke_check_front/models/request/post_request.dart';
+import 'package:choke_check_front/ui/pages/take_picture_page.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -33,11 +39,34 @@ class _CreatePostPageState extends State<CreatePostPage> {
   PostRepository authRepository =
       PostRepositoryImpl(postService: PostService.create());
   late PostBloc _postBloc;
+  late File fileSelected = File('');
+
+  late final List<CameraDescription> cameras;
+  late final CameraDescription firstCamera;
+
+  void pickImageBeltFile(){
+    FilePicker.platform
+        .pickFiles(
+      type: FileType.image,
+      allowMultiple: false,
+    ).then((result) {
+
+      if (result != null) {
+        fileSelected = File(result.files.first.path!);
+      } else {
+        print("ERROR :: Not file selected");
+      }
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     _postBloc = PostBloc(authRepository)..add(PostGoFormEvent());
+    availableCameras().then((value){
+      cameras = value;
+      firstCamera = value.first;
+    });
   }
 
   @override
@@ -411,6 +440,10 @@ class _CreatePostPageState extends State<CreatePostPage> {
                       const SizedBox(
                         height: 25,
                       ),
+                      _buildTakePicturesPhoto(),
+                      const SizedBox(
+                        height: 25,
+                      ),
                       Center(
                         child: SizedBox(
                           width: 350,
@@ -434,7 +467,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                                     title: titleTextController.text,
                                     type: typeColorController);
                                 _postBloc
-                                    .add(CreatePostEvent(newPost: newPost));
+                                    .add(CreatePostEvent(newPost: newPost, file: fileSelected));
                               }
                             },
                             child: const Text(
@@ -544,6 +577,10 @@ class _CreatePostPageState extends State<CreatePostPage> {
                   const SizedBox(
                     height: 25,
                   ),
+                  _buildTakePicturesPhoto(),
+                  const SizedBox(
+                    height: 25,
+                  ),
                   Center(
                     child: SizedBox(
                       width: 350,
@@ -562,7 +599,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                                 content: contentTextController.text,
                                 title: titleTextController.text,
                                 type: typeColorController);
-                            _postBloc.add(CreatePostEvent(newPost: newPost));
+                            _postBloc.add(CreatePostEvent(newPost: newPost, file: fileSelected));
                           }
                         },
                         child: const Text(
@@ -591,5 +628,45 @@ class _CreatePostPageState extends State<CreatePostPage> {
     } else {
       return const Text('Not valid data');
     }
+  }
+
+  Widget _buildTakePicturesPhoto(){
+     return Column(
+       children: [
+         const Text('Clicking on this buttons you can upload a photo to the post, it is not obligatory but we recommend it.' , style: TextStyle(color: Colors.black),),
+         Text('If you get into here after take a picture select it on the upload picture', style: TextStyle(color: Colors.grey.shade700),),
+         Row(
+           mainAxisAlignment: MainAxisAlignment.spaceAround,
+           children: [
+             IconButton(
+                 tooltip: 'Take photo',
+                 style: ButtonStyle(
+                     backgroundColor: MaterialStateProperty.all<Color>(
+                         const Color.fromARGB(255, 7, 43, 97)),
+                     elevation: MaterialStateProperty.all<double>(0),
+                     shape: MaterialStateProperty.all(
+                         RoundedRectangleBorder(
+                             borderRadius: BorderRadius.circular(8)))),
+                 onPressed: () {
+                   Navigator.push(
+                       context,
+                       CupertinoPageRoute(
+                           builder: (context) => TakePicturePage(camera: firstCamera)));
+                 }, icon: const Icon(Icons.camera_alt, color: Colors.white, size: 50,)),
+             IconButton(
+                 tooltip: 'Upload photo',
+                 style: ButtonStyle(
+                     backgroundColor: MaterialStateProperty.all<Color>(
+                         const Color.fromARGB(255, 7, 43, 97)),
+                     elevation: MaterialStateProperty.all<double>(0),
+                     shape: MaterialStateProperty.all(
+                         RoundedRectangleBorder(
+                             borderRadius: BorderRadius.circular(8)))),
+                 onPressed: pickImageBeltFile,
+                 icon: const Icon(Icons.file_upload_outlined, color: Colors.white, size: 50,)),
+           ],
+         ),
+       ],
+     );
   }
 }

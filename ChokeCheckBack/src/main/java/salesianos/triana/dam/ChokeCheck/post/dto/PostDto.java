@@ -1,15 +1,18 @@
 package salesianos.triana.dam.ChokeCheck.post.dto;
 
 import lombok.Builder;
+import salesianos.triana.dam.ChokeCheck.image.model.Image;
 import salesianos.triana.dam.ChokeCheck.like.model.Like;
 import salesianos.triana.dam.ChokeCheck.post.model.Post;
 import salesianos.triana.dam.ChokeCheck.rate.model.Rate;
 import salesianos.triana.dam.ChokeCheck.user.model.User;
 
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.Set;
 
 @Builder
-public record PostDto(String id, String type, String authorName, String authorBelt, int likes,boolean isLikedByLoggedUser, Double avgRate, String title, String content, boolean isRatedByLoggedUser) {
+public record PostDto(String id, String type, String authorName, String authorBelt, int likes,boolean isLikedByLoggedUser, Double avgRate, String title, String content, boolean isRatedByLoggedUser, String image) {
     public static PostDto of(Post post, User user){
         return PostDto.builder()
                 .id(post.getId().toString())
@@ -27,6 +30,29 @@ public record PostDto(String id, String type, String authorName, String authorBe
                 .avgRate(getAvgRate(post.getRating()))
                 .title(post.getTitle())
                 .authorBelt(post.getAuthor().getBelt_color().toString())
+                .image("")
+                .content(post.getContent())
+                .build();
+    }
+
+    public static PostDto ofWithImage(Post post, User user, Image image){
+        return PostDto.builder()
+                .id(post.getId().toString())
+                .type(post.getType().toString())
+                .authorName(post.getAuthor().getUsername())
+                .isRatedByLoggedUser(post.getRating().stream()
+                        .map(Rate::getAuthor)
+                        .map(User::getId).toList().contains(user.getId()))
+                .isLikedByLoggedUser(
+                        post.getLikes().stream()
+                                .map(Like::getAuthor)
+                                .map(User::getId).toList().contains(user.getId())
+                )
+                .likes(post.getLikes().size())
+                .avgRate(getAvgRate(post.getRating()))
+                .title(post.getTitle())
+                .authorBelt(post.getAuthor().getBelt_color().toString())
+                .image(Base64.getEncoder().encodeToString(image.getData()))
                 .content(post.getContent())
                 .build();
     }

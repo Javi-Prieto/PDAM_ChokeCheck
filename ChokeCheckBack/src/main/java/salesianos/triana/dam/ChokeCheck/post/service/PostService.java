@@ -4,10 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import salesianos.triana.dam.ChokeCheck.assets.MyPage;
 import salesianos.triana.dam.ChokeCheck.error.exception.NotAuthorException;
 import salesianos.triana.dam.ChokeCheck.error.exception.NotBeltLevelException;
 import salesianos.triana.dam.ChokeCheck.error.exception.NotFoundException;
+import salesianos.triana.dam.ChokeCheck.image.model.Image;
+import salesianos.triana.dam.ChokeCheck.image.service.ImageServiceImpl;
 import salesianos.triana.dam.ChokeCheck.like.model.Like;
 import salesianos.triana.dam.ChokeCheck.like.model.LikePk;
 import salesianos.triana.dam.ChokeCheck.post.dto.CreatePostDto;
@@ -21,29 +24,45 @@ import salesianos.triana.dam.ChokeCheck.user.model.BeltColor;
 import salesianos.triana.dam.ChokeCheck.user.model.User;
 import salesianos.triana.dam.ChokeCheck.user.model.UserRole;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 
 @Service
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository repository;
-
+    private final ImageServiceImpl imageService;
 
     public MyPage<PostDto> getAllPost(Pageable pageable, User user){
         Page<Post> all = repository.findAll(pageable);
         List<Post> result = repository.findAllPaged(all.getContent().stream().map(Post::getId).toList());
 
         Page<PostDto> toReturn = all.map(PostDto::ofWithNoRating);
-        return MyPage.of(toReturn, result.stream().map(p -> PostDto.of(p, user)).toList());
+        List<PostDto> toConvert = new ArrayList<>();
+        result.forEach((post )-> {
+            if(post.getFileName().isEmpty()){
+                toConvert.add(PostDto.of(post, user));
+            }else{
+                Image image = imageService.load(post.getFileName());
+                toConvert.add(PostDto.ofWithImage(post, user, image));
+            }
+
+        } );
+        return MyPage.of(toReturn, toConvert);
     }
 
     public PostDto createPost(CreatePostDto newPost, User author){
         Post toSave = CreatePostDto.from(newPost);
         toSave.setAuthor(author);
         return PostDto.of(repository.save(toSave), author);
+    }
+
+    public PostDto createPost(CreatePostDto newPost, User author, MultipartFile image){
+        Post toSave = CreatePostDto.from(newPost);
+        Image imageComp = imageService.store(image);
+        toSave.setFileName(imageComp.getFileName());
+        toSave.setAuthor(author);
+        return PostDto.ofWithImage(repository.save(toSave), author, imageComp);
     }
     public PostDto addLike(UUID id, User logged){
         Optional<Post> selected = repository.findFirstById(id);
@@ -74,6 +93,9 @@ public class PostService {
         Optional<Post> post = repository.findById(id);
         if(post.isEmpty()) throw new NotFoundException("Post");
         if (!post.get().getAuthor().getId().equals(user.getId()) && !user.getRoles().contains(UserRole.ADMIN)) throw new NotAuthorException();
+        if (!post.get().getFileName().isEmpty()){
+            imageService.deleteFile(post.get().getFileName());
+        }
         repository.delete(post.get());
     }
 

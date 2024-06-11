@@ -14,6 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import salesianos.triana.dam.ChokeCheck.error.exception.NotAuthorException;
 import salesianos.triana.dam.ChokeCheck.error.exception.NotBeltLevelException;
 import salesianos.triana.dam.ChokeCheck.error.exception.NotFoundException;
+import salesianos.triana.dam.ChokeCheck.error.exception.StorageException;
 import salesianos.triana.dam.ChokeCheck.error.impl.ApiValidationSubError;
 
 import java.net.URI;
@@ -57,6 +58,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ErrorResponse handleNotBeltLevelException(NotBeltLevelException exception){
         return ErrorResponse.builder(exception, HttpStatus.UNAUTHORIZED, exception.getMessage())
                 .title("Not belt level")
+                .type(URI.create("https://api.choke-check.com/errors/not-author"))
+                .property("timestamp", Instant.now())
+                .build();
+    }
+
+    @ExceptionHandler({StorageException.class})
+    public ErrorResponse handleStorageException(StorageException exception){
+        return ErrorResponse.builder(exception, HttpStatus.BAD_REQUEST, exception.getMessage())
+                .title("Error with the files")
                 .type(URI.create("https://api.choke-check.com/errors/not-author"))
                 .property("timestamp", Instant.now())
                 .build();

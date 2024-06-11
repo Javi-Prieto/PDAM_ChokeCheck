@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import salesianos.triana.dam.ChokeCheck.assets.MyPage;
 import salesianos.triana.dam.ChokeCheck.error.exception.NotAuthorException;
 import salesianos.triana.dam.ChokeCheck.error.exception.NotBeltLevelException;
@@ -153,6 +154,41 @@ public class PostController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User autor = (User) auth.getPrincipal();
         return ResponseEntity.status(201).body(service.createPost(newPost, autor));
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "The Post Created Correctly", content = {
+                    @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = Post.class)),
+                            examples = {@ExampleObject(
+                                    value = """
+                                                {
+                                                    "id": "04a1f811-c826-48aa-a601-7f72bd614303",
+                                                    "type": "TRAINING",
+                                                    "authorName": "javi.prieto",
+                                                    "authorBelt": "RED",
+                                                    "likes": 1,
+                                                    "avgRate": 9.0,
+                                                    "title": "My First Ever Training",
+                                                    "content": "3x3min Jump Ropes,4x3min Pads,5x3min Sparring"
+                                                }
+                                            """
+                            )}
+                    )}),
+            @ApiResponse(responseCode = "400",
+                    description = "The body is not correct",
+                    content = @Content),
+            @ApiResponse(responseCode = "401",
+                    description = "Not logged user",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = PostDto.class))))
+    })
+    @Operation(summary = "Create new Post", description = "Create new Post")
+    @PostMapping("/")
+    public ResponseEntity<?> createPostImage(@RequestPart("file") MultipartFile file, @RequestPart("title") String title, @RequestPart("type") String type, @RequestPart("content") String content){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User autor = (User) auth.getPrincipal();
+        return ResponseEntity.status(201).body(service.createPost(CreatePostDto.builder().title(title).type(type).content(content).build(), autor, file));
     }
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204",

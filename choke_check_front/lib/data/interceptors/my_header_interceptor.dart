@@ -17,6 +17,13 @@ class MyHeaderInterceptor implements RequestInterceptor {
 
   @override
   Future<Request> onRequest(Request request) async {
+    // if(request.multipart){
+    //   return applyHeaders(request,{
+    //     'Authorization': await getToken(),
+    //     'Content-Type': 'multipart/form-data',
+    //     'Accept': '*/*',
+    //   });
+    // }
     return applyHeader(
         request, HttpHeaders.authorizationHeader, await getToken());
   }

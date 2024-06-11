@@ -89,4 +89,44 @@ final class _$PostService extends PostService {
     );
     return client.send<dynamic, dynamic>($request);
   }
+
+  @override
+  Future<Response<dynamic>> createPostWithPhoto(
+    MultipartFile file,
+    String title,
+    String type,
+    String content,
+  ) {
+    final Uri $url = Uri.parse('post/');
+    final List<PartValue> $parts = <PartValue>[
+      PartValue<String>(
+        'title',
+        title,
+      ),
+      PartValue<String>(
+        'type',
+        type,
+      ),
+      PartValue<String>(
+        'content',
+        content,
+      ),
+      PartValueFile<MultipartFile>(
+        'file',
+        file,
+      ),
+    ];
+    final Request $request = Request(
+      'POST',
+      $url,
+      client.baseUrl,
+      parts: $parts,
+      multipart: true,
+    );
+    return client.send<dynamic, dynamic>(
+      $request,
+      requestConverter: FormUrlEncodedConverter.requestFactory,
+      responseConverter: JsonConverter.responseFactory,
+    );
+  }
 }

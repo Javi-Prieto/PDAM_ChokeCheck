@@ -11,6 +11,7 @@ class Content {
   String? title;
   String? content;
   bool? isRatedByLoggedUser;
+  String? image;
 
   Content({
     this.id,
@@ -23,6 +24,7 @@ class Content {
     this.title,
     this.content,
     this.isRatedByLoggedUser,
+    this.image,
   });
 
   factory Content.fromMap(Map<String, dynamic> data) => Content(
@@ -36,6 +38,7 @@ class Content {
         title: data['title'] as String?,
         content: data['content'] as String?,
         isRatedByLoggedUser: data['isRatedByLoggedUser'] as bool?,
+        image: data['image'] as String?,
       );
 
   Map<String, dynamic> toMap() => {
@@ -49,6 +52,7 @@ class Content {
         'title': title,
         'content': content,
         'isRatedByLoggedUser': isRatedByLoggedUser,
+        'image': image,
       };
 
   /// `dart:convert`

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:choke_check_front/models/request/post_request.dart';
 import 'package:choke_check_front/models/response/create_post_response.dart';
 import 'package:choke_check_front/models/response/post_list_response/post_list_response.dart';
@@ -14,4 +16,6 @@ abstract class PostRepository {
   Future<dynamic> addLike(String id);
 
   Future<dynamic> deleteLike(String id);
+
+  Future<CreatePostResponse> createPostWithImage(File file, PostRequest post);
 }

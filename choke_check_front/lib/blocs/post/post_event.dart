@@ -14,8 +14,8 @@ final class PostGoFormEvent extends PostEvent {}
 
 final class CreatePostEvent extends PostEvent {
   final PostRequest newPost;
-
-  CreatePostEvent({required this.newPost});
+  final File file;
+  CreatePostEvent({required this.newPost, required this.file});
 }
 
 final class DeletePostEvent extends PostEvent {

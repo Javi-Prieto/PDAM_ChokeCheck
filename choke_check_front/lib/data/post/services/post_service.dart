@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:choke_check_front/data/interceptors/my_header_interceptor.dart';
+import 'package:choke_check_front/models/request/post_request.dart';
 import 'package:chopper/chopper.dart';
+import 'package:http/http.dart' show MultipartFile;
 part 'post_service.chopper.dart';
 
 @ChopperApi()
@@ -32,4 +36,14 @@ abstract class PostService extends ChopperService {
 
   @Delete(path: 'post/like/{id}')
   Future<Response> deleteLike(@Path() String id);
+
+  @Post(path: 'post/')
+  @FactoryConverter(
+    request: FormUrlEncodedConverter.requestFactory,
+    response: JsonConverter.responseFactory
+  )
+  @multipart
+  Future<Response> createPostWithPhoto(@PartFile('file') MultipartFile file, @Part('title') String title, @Part('type') String type, @Part('content') String content);
+
 }
+
