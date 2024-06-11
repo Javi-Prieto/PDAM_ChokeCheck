@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:choke_check_front/blocs/post/post_bloc.dart';
 import 'package:choke_check_front/data/post/repository/post_repository.dart';
@@ -201,6 +204,17 @@ class _PostPageState extends State<PostPage> {
             itemBuilder: (BuildContext context, index) {
               attachListController();
               if(index < postList.length){
+                if(postList[index].image!.isNotEmpty){
+                  return ImagePost(
+                      getCardColor: _getCardColor,
+                      getIconColor: _getIconColor,
+                      getBody: _getBody,
+                      getDeleteButton: _getDeleteButton,
+                      getStarButton: _getStarButton,
+                      getHeartButton: _getHeartButton,
+                      post: postList[index],
+                      index: index);
+                }
                 return Center(
                   child: SizedBox(
                     width: 500,
@@ -578,3 +592,154 @@ class _PostPageState extends State<PostPage> {
     );
   }
 }
+
+class ImagePost extends StatefulWidget {
+  final Function(String post) getCardColor;
+  final Function(String post) getIconColor;
+  final Function(Content post) getBody;
+  final Function(Content post) getDeleteButton;
+  final Function(Content post, int index) getStarButton;
+  final Function(Content post, int index) getHeartButton;
+  final Content post;
+  final int index;
+
+  const ImagePost({super.key, required this.getCardColor, required this.getIconColor, required this.getBody, required this.getDeleteButton, required this.getStarButton, required this.getHeartButton, required this.post, required this.index});
+
+  @override
+  State<ImagePost> createState() => _ImagePostState();
+}
+
+class _ImagePostState extends State<ImagePost> {
+  late Image image;
+  double containerHeight = 325;
+  bool isDescriptionVisible = false;
+
+  @override
+  void initState() {
+    final bytes = base64Decode(widget.post.image!);
+    image = Image.memory(
+        bytes,
+      fit: BoxFit.fill,
+      width: 200,
+      height: 150,
+    );
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: SizedBox(
+        width: 500,
+        child: Card(
+          color: Colors.grey.shade100,
+          child: Row(
+            children: [
+              Container(
+                height: containerHeight,
+                width: 25,
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(8),
+                      bottomLeft: Radius.circular(8)),
+                  color: widget.getCardColor(widget.post.type!),
+                ),
+                child: RotatedBox(
+                    quarterTurns: -1,
+                    child: Center(
+                        child: Text(
+                          widget.post.type!.toUpperCase(),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold),
+                        ))),
+              ),
+              const SizedBox(
+                width: 20,
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    widget.post.title!,
+                    softWrap: true,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 20),
+                    textAlign: TextAlign.center,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                              builder: (context) => UserDetailPage(
+                                  username:
+                                  widget.post.authorName!)));
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          widget.post.authorName!.toUpperCase(),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Icon(
+                          Icons.accessibility_new_rounded,
+                          color: widget.getIconColor(
+                              widget.post.authorBelt!),
+                        )
+                      ],
+                    ),
+                  ),
+                  Center(child: image),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(onPressed: (){
+                        setState(() {
+                          containerHeight = containerHeight == 430? 325 : 430;
+                          isDescriptionVisible = isDescriptionVisible?false:true;
+                        });
+                      }, child: const Text('See description[...]')),
+                      widget.getDeleteButton(widget.post),
+                      Text(
+                        widget.post.avgRate!.toString(),
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                      widget.getStarButton(widget.post, widget.index),
+                      Text(
+                        widget.post.likes!.toString(),
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                      widget.getHeartButton(widget.post, widget.index),
+                    ],
+                  ),
+                  Visibility(
+                      visible: isDescriptionVisible,
+                      child: Column(children: [
+                        const SizedBox(
+                        height: 25,
+                      ),
+                        widget.getBody(widget.post)
+                      ],
+                      )
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  )
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+  }
+}
+

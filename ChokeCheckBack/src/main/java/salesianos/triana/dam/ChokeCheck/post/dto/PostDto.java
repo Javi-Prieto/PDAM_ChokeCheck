@@ -8,12 +8,12 @@ import salesianos.triana.dam.ChokeCheck.rate.model.Rate;
 import salesianos.triana.dam.ChokeCheck.user.model.User;
 
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Set;
 
 @Builder
-public record PostDto(String id, String type, String authorName, String authorBelt, int likes,boolean isLikedByLoggedUser, Double avgRate, String title, String content, boolean isRatedByLoggedUser, byte[] image) {
+public record PostDto(String id, String type, String authorName, String authorBelt, int likes,boolean isLikedByLoggedUser, Double avgRate, String title, String content, boolean isRatedByLoggedUser, String image) {
     public static PostDto of(Post post, User user){
-        byte [] empty= new byte[0];
         return PostDto.builder()
                 .id(post.getId().toString())
                 .type(post.getType().toString())
@@ -30,7 +30,7 @@ public record PostDto(String id, String type, String authorName, String authorBe
                 .avgRate(getAvgRate(post.getRating()))
                 .title(post.getTitle())
                 .authorBelt(post.getAuthor().getBelt_color().toString())
-                .image(empty)
+                .image("")
                 .content(post.getContent())
                 .build();
     }
@@ -52,7 +52,7 @@ public record PostDto(String id, String type, String authorName, String authorBe
                 .avgRate(getAvgRate(post.getRating()))
                 .title(post.getTitle())
                 .authorBelt(post.getAuthor().getBelt_color().toString())
-                .image(image.getData())
+                .image(Base64.getEncoder().encodeToString(image.getData()))
                 .content(post.getContent())
                 .build();
     }

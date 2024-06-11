@@ -93,6 +93,9 @@ public class PostService {
         Optional<Post> post = repository.findById(id);
         if(post.isEmpty()) throw new NotFoundException("Post");
         if (!post.get().getAuthor().getId().equals(user.getId()) && !user.getRoles().contains(UserRole.ADMIN)) throw new NotAuthorException();
+        if (!post.get().getFileName().isEmpty()){
+            imageService.deleteFile(post.get().getFileName());
+        }
         repository.delete(post.get());
     }
 

@@ -4,10 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import salesianos.triana.dam.ChokeCheck.assets.ImageOptimizer;
 import salesianos.triana.dam.ChokeCheck.error.exception.StorageException;
 import salesianos.triana.dam.ChokeCheck.image.model.Image;
 import salesianos.triana.dam.ChokeCheck.image.repository.ImageRepository;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.chrono.ChronoLocalDateTime;
@@ -29,7 +34,7 @@ public class ImageServiceImpl implements StorageService{
                 toStore = Image.builder()
                         .fileType(file.getContentType())
                         .size(file.getSize())
-                        .data(file.getBytes())
+                        .data(ImageOptimizer.optimizeAndResizeImage(file))
                         .fileName(file.getOriginalFilename())
                         .build();
                 try{
@@ -69,11 +74,13 @@ public class ImageServiceImpl implements StorageService{
 
     @Override
     public void deleteFile(String filename) {
-
+        repository.deleteById(filename);
     }
 
     @Override
     public void deleteAll() {
 
     }
+
+
 }
