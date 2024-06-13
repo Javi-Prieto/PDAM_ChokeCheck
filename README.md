@@ -20,6 +20,8 @@ El proyecto se encuentra actualmente en desarrollo en su versión 1.0.
 
 ## Demostración de funciones y aplicaciones
 Actualmente en la aplicación puedes realizar diferentes funciones que las vamos a dividir según las pantallas que podemos ver:
+### Acceso
+En el acceso a la app podremos ver la opción de Iniciar Sesión o Registrarse, clickando en registrarse podremos subir o tomar una foto de nuestro dispositivo para verificar que realmente somos practicantes de Brazilian JuJitsu está imagen será procesada por una inteligencia artificial que reconocerá si el cinturón subido es el mismo que el cinturón indicado por el usuario en el formulario de registro.
 ### Post
 ![alt text](image.png)
 
@@ -60,6 +62,16 @@ cd ChockeCheckBack
 docker compose up -d
 mvn: spring-boot run
 ```
+### IA BACKEND
+Desde nuestra terminal accederemos a la carpeta image_recognison_ai. Debemos tener previamente instalado Python 3.12.
+Y seguir los siguientes comandos
+``
+cd image_recognison_ai
+pip install requirements.txt
+python ./model_training.py
+python ./main.py
+``
+Y ahora tendremos habilitadas las funciones de este servicio.
 ### Frontend
 Desde nuestra terminal accederemos a la carpeta chocke_check_front. Previo a esto debemos tener instalado Flutter y Dart.
 
@@ -72,9 +84,9 @@ flutter run ./lib/main.dart
 
 ## Tecnologías utilizadas
 ### Backend
-Para la parte del backend hemos utilizado Java con el framework de Spring Boot en su versión 3.2.2.
+Para la parte del backend hemos utilizado Java con el framework de Spring Boot en su versión 3.2.2. Además de utilizar Python para generar una inteligencia artificial con ayuda de la librería de Tensorflow y Keras y un servicio de API con ayuda de FastAPI para tener acceso a esta.
 ### Frontend
-Para el Frontend en el apartado móvil hemos utilizado Flutter.
+Para el Frontend en el apartado móvil hemos utilizado Flutter y en el apartado web Angular.
 
 ## Desarrolladores
 El único desarrollador de este proyecto soy yo Javier Prieto Ortiz

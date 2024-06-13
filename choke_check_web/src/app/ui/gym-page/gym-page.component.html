@@ -81,16 +81,16 @@
 					</div>
 				</div>
 				<label for="sel" class="form-label">Gym Average belt</label>
-				<select class="form-select mb-3" aria-label="Default select example">
-					<option [selected]="gymAvgBelt == '' " disabled>Select the gym average belt</option>
-					<option (click)="gymAvgBelt = 'WHITE'" [selected]="gymAvgBelt == 'WHITE' ">White</option>
-					<option (click)="gymAvgBelt = 'BLUE'"  [selected]="gymAvgBelt == 'BLUE' ">Blue</option>
-					<option (click)="gymAvgBelt = 'PURPLE'"  [selected]="gymAvgBelt == 'PURPLE' ">Purple</option>
-					<option (click)="gymAvgBelt = 'BROWN'" value="3" [selected]="gymAvgBelt == 'BROWN' ">Brown</option>
-					<option (click)="gymAvgBelt = 'BLACK'" value="3" [selected]="gymAvgBelt == 'BLACK' ">Black</option>
-					<option (click)="gymAvgBelt = 'RED_BLACK'" value="3" [selected]="gymAvgBelt == 'RED_BLACK' ">Red Black</option>
-					<option (click)="gymAvgBelt = 'RED_WHITE'" value="3" [selected]="gymAvgBelt == 'RED_WHITE' ">Red White</option>
-					<option (click)="gymAvgBelt = 'RED'" value="3" [selected]="gymAvgBelt == 'RED' ">Red</option>
+				<select class="form-select" aria-label="Default select example" (change)="onBeltChange($event)">
+					<option selected disabled>Higher Belt</option>
+					<option value="WHITE"[selected]="gymAvgBelt == 'WHITE' ">White</option>
+					<option value="BLUE"[selected]="gymAvgBelt == 'BLUE' ">Blue</option>
+					<option value="PURPLE"[selected]="gymAvgBelt == 'PURPLE' ">Purple</option>
+					<option value="BROWN"[selected]="gymAvgBelt == 'BROWN' ">Brown</option>
+					<option value="BLACK"[selected]="gymAvgBelt == 'BLACK' ">Black</option>
+					<option value="RED_BLACK" [selected]="gymAvgBelt == 'RED_BLACK' ">Red Black</option>
+					<option value="RED_WHITE" [selected]="gymAvgBelt == 'RED_WHITE' ">Red White</option>
+					<option value="RED"[selected]="gymAvgBelt == 'RED' ">Red</option>
 				</select>
 				<button type="button" class="btn btn-dark" (click)="toSave()">Guardar</button>
 				

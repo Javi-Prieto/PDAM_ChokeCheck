@@ -109,31 +109,31 @@
 				</div>
 				<div class="mb-3 row">
 					<div class="col-6">
-						<select class="form-select" aria-label="Default select example">
+						<select class="form-select" aria-label="Default select example" (change)="onBeltChange($event)">
 							<option selected disabled>Higher Belt</option>
-							<option (click)="tournHigherBelt = 'WHITE'">White</option>
-							<option (click)="tournHigherBelt = 'BLUE'">Blue</option>
-							<option (click)="tournHigherBelt = 'PURPLE'">Purple</option>
-							<option (click)="tournHigherBelt = 'BROWN'" value="3">Brown</option>
-							<option (click)="tournHigherBelt = 'BLACK'" value="3">Black</option>
-							<option (click)="tournHigherBelt = 'RED_BLACK'" value="3">Red Black</option>
-							<option (click)="tournHigherBelt = 'RED_WHITE'" value="3">Red White</option>
-							<option (click)="tournHigherBelt = 'RED'" value="3">Red</option>
+							<option value="WHITE">White</option>
+							<option value="BLUE">Blue</option>
+							<option value="PURPLE">Purple</option>
+							<option value="BROWN">Brown</option>
+							<option value="BLACK">Black</option>
+							<option value="RED_BLACK">Red Black</option>
+							<option value="RED_WHITE">Red White</option>
+							<option value="RED">Red</option>
 						</select>
 					</div>
 					<div class="col-6">
-						<select class="form-select" aria-label="Default select example">
+						<select class="form-select" aria-label="Default select example" (change)="onSexChange($event)">
 							<option selected disabled>Sex</option>
-							<option (click)="tournSex = 0">Male</option>
-							<option (click)="tournSex = 1">Female</option>
+							<option value="0">Male</option>
+							<option value="1">Female</option>
 						</select>
 					</div>
 				</div>
 				<div class="col-6 mb-3">
-					<select class="form-select" aria-label="Default select example">
+					<select class="form-select" aria-label="Default select example" (change)="onGymChange($event)">
 						<option selected disabled>Gym</option>
 						@for(gym of gyms; track gym.id){
-							<option (click)="creatorGymId = gym.id">{{gym.name}}</option>
+							<option [value]="gym.id">{{gym.name}}</option>
 						}
 					</select>
 				</div>

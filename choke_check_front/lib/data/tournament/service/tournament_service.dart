@@ -6,7 +6,7 @@ part 'tournament_service.chopper.dart';
 abstract class TournamentService extends ChopperService {
   static TournamentService create() {
     final client = ChopperClient(
-      baseUrl: Uri.parse('http://10.0.2.2:8080/'),
+      baseUrl: Uri.parse('http://18.171.149.35:8080/'),
       services: [_$TournamentService()],
       interceptors: [MyHeaderInterceptor()],
       converter: JsonConverter(),

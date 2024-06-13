@@ -51,6 +51,10 @@ export class GymPageComponent implements OnInit {
 			},
 		);
 	}
+  onBeltChange(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement;
+    this.gymAvgBelt = selectElement.value;
+  }
 
   refreshGyms() {
     this.gymService.getGyms(this.pageNumber -1).subscribe({
@@ -69,12 +73,15 @@ export class GymPageComponent implements OnInit {
 
   toSave() {
     let toSave = new CreateGymRequest(this.gymName, this.gymCity, this.lat, this.lon, this.gymAvgBelt);
+    console.log(toSave);
     if(this.isEdit){
       this.gymService.editGym(this.gymId, toSave).subscribe({
         next: data=> {
+          
           window.location.href = `${environment.localHost}gym`
         }, error: err => {
           if(err.status == 400){
+            
             let badReq = err.error;
             console.log(badReq);
             let errors = badReq.body.fields_errors;
@@ -99,8 +106,10 @@ export class GymPageComponent implements OnInit {
     }else{
       this.gymService.createGym(toSave).subscribe({
         next: data=> {
+          console.log(data);
           window.location.href = `${environment.localHost}gym`
         }, error: err => {
+          console.log(err);
           if(err.status == 400){
             let badReq = err.error;
             console.log(badReq);
