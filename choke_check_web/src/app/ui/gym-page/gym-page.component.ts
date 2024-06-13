@@ -35,6 +35,11 @@ export class GymPageComponent implements OnInit {
     
   }
 
+  onBeltChange(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement;
+    this.gymAvgBelt = selectElement.value;
+  }
+
   open(content: TemplateRef<any>) {
     this.gymName = '';
     this.lon = 0;
@@ -69,6 +74,7 @@ export class GymPageComponent implements OnInit {
 
   toSave() {
     let toSave = new CreateGymRequest(this.gymName, this.gymCity, this.lat, this.lon, this.gymAvgBelt);
+    console.log(toSave);
     if(this.isEdit){
       this.gymService.editGym(this.gymId, toSave).subscribe({
         next: data=> {

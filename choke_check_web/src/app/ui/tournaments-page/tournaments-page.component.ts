@@ -67,6 +67,19 @@ export class TournamentsPageComponent {
     });
   }
 
+  onBeltChange(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement;
+    this.tournHigherBelt = selectElement.value;
+  }
+  onGymChange(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement;
+    this.creatorGymId = selectElement.value;
+  }
+  onSexChange(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement;
+    this.tournSex = Number(selectElement.value);
+  }
+
   open(content: TemplateRef<any>) {
     this.tournamentTitle = "";
     this.tournDesc = "";
