@@ -68,8 +68,13 @@ class _PostPageState extends State<PostPage> {
           body: SafeArea(
             child:
                 BlocConsumer<PostBloc, PostState>(buildWhen: (context, state) {
-              return state is! PostFormClick;
-            }, builder: (context, state) {
+                  return state is !PostFormClick ||
+                      state is !DeletePostSuccess ||
+                      state is !CreateRateSuccess ||
+                      state is !AddLikeSuccess ||
+                      state is !DeleteLikeSuccess;
+            },
+                    builder: (context, state) {
               if (state is PostInitial) {
                 return const Center(
                   child: CircularProgressIndicator(),
@@ -136,7 +141,11 @@ class _PostPageState extends State<PostPage> {
                 );
               } else if (state is PostFetched) {
                 for(Content post in state.postList){
-                  if(!postList.contains(post)) postList.add(post);
+                  if(!postList.map((post)=> post.id).contains(post.id)) {
+                    postList.add(post);
+                  }else{
+                    postList[state.postList.indexOf(post)] = state.postList[state.postList.indexOf(post)];
+                  }
                 }
                 return _onFetched();
               } else {
